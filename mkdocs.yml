@@ -1,0 +1,29 @@
+# Project information
+site_name: CLOUDACODE - cloud, devops, kubernetes, and cncf
+site_url: https://cloudacode.github.io/tutorials/
+site_author: KC Chang
+
+# Repository
+repo_name: cloudacode/tutorials
+repo_url: https://github.com/cloudacode/tutorials
+edit_uri: ""
+
+# Configuration
+theme:
+  name: material
+
+# Page tree
+nav:
+  - Home: index.md
+  - Tutorial:
+    - Cloud:
+      - cloud/aws/ec2-setup.md
+      - cloud/gcp/gcp-ce-setup.md
+  #   - DevOps(CI/CD):
+  #   - DevOps(Terraform):
+  #   - Kubernetes:
+  #   - Monitoring: 
+  #   - CNCF:
+  #   - ETC:
+  - Blog ⧉: https://medium.com/@cloudacode
+  - PodCast ⧉: https://www.podbbang.com/channels/1779436
