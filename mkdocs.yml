@@ -11,14 +11,19 @@ edit_uri: ""
 # Configuration
 theme:
   name: material
+markdown_extensions:
+  - admonition
 
 # Page tree
 nav:
   - Home: index.md
   - Tutorial:
     - Cloud:
-      - cloud/aws/ec2-setup.md
-      - cloud/gcp/gcp-ce-setup.md
+      - AWS:
+        - cloud/aws/ec2-setup.md
+        - cloud/aws/apache-tomcat-redis.md
+      - GCP:
+        - cloud/gcp/gcp-ce-setup.md
   #   - DevOps(CI/CD):
   #   - DevOps(Terraform):
   #   - Kubernetes:

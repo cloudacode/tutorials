@@ -1,6 +1,6 @@
-# AWS - EC2 구축
+# Launch an EC2, Deploy Flask app
 
-**AWS 환경 구성 및 EC2 구축**
+**AWS EC2 구성 및 Python Flask 앱 배포**
 
 이번 실습은 AWS를 통해 서비스 구성 시 가장 기본이 되는 EC2 구성 실습을 통해서 AWS의 기본 서비스들을 이해 하고 AWS 콘솔 활용 방법을 익히기 위함입니다. EC2로 컴퓨팅 리소스 활용 및 서비스 배포를 위한 기본 작업들을 이해 할 수 있습니다.
 
@@ -58,19 +58,27 @@ AWS콘솔에서 Display 되는 Tag 의 값을 지정 하는 부분 이고 Add Ta
 
 SG는 Host 레벨의 방화벽이며 Allow 정책만 가능하며 서비스할 Port 만 허용 혹은 원격 접속을 위한 접근 대역 IP 로만 제한을 통해 보안 수준을 높임
 
-- Secuirty Group Name: test-web-sg
-  - Type: SSH
-  - Source: My IP or Anywhere
-  - Type: HTTP
-  - Source: My IP or Anywhere
+Secuirty Group Name: `test-flask-sg`
+
+- SSH(22)
+    - Type: SSH
+    - Source: My IP or Anywhere
+- TCP(5000, Flask)
+    - Type: Custom TCP
+    - PORT: 5000
+    - Source: My IP or Anywhere
+
+!!! Note
+    만약 node.js 혹은 django 로 실습을 수행할 시에 해당 포트에 맞게 Custom TCP port 설정 변경
 
 ### Review Instance Launch
 
-Instance 배포를 위해 지정한 설정값들을 리뷰 하는 단계 이며 서버에 접근을 위한 key 발급을 진행
-Launch 클릭후 key pair 생성
+Instance 배포를 위해 지정한 설정값들을 리뷰 하는 단계 이며 서버에 접근을 위한 key 발급을 진행, Launch 클릭후 key pair 생성
 
-`Create a new key pair` 
-Download Key Pair 후 안전한 곳에 key 를 저장 재발급 되지 않음
+**Create a new key pair** 진행 후 Download Key Pair
+
+!!! Warning 
+    key는 재발급 되지 않으므로 안전한 곳에 key 를 저장 
 
 ## 2. Monitor EC2 instance
 
@@ -79,8 +87,8 @@ Status Checks 가 2/2가 되면 정상 배포 완료
 
 ## 3. Access EC2 instance
 
-인스턴스 대쉬보드에서 `connect` 버튼을 클릭하면 터미널로 접속 가이드라인이 제공
-e.g.,
+[EC2 콘솔](https://ap-northeast-2.console.aws.amazon.com/ec2/v2/home?region=ap-northeast-2#Instances:instanceState=running)에서 생성한 인스턴스 선택 후 **connect** 버튼을 클릭하면 터미널로 접속 가이드라인이 아래와 같이 제공
+
 ```bash
  ssh -i <your_key> ec2-user@<EC2_HOSTNAME>
 ```
@@ -100,18 +108,39 @@ https://www.netsarang.co.kr/download/down_form.html?code=512
 ![add-xshell-private-key](assets/add-xshell-private-key.png)
 ![access-ec2-instance-xshell](assets/access-ec2-instance-xshell.png)
 
-## 4. Install httpd on Linux
+## 4. Run Python Flask on EC2 server
 
-접근한 Linux에서 apache 설치
+접근한 Linux에서 Flask 설치
 ```bash
-sudo yum -y install httpd
-sudo systemctl enable httpd
-sudo systemctl start httpd
+pip3 install Flask
+pip3 freeze > requirements.txt
 ```
 
-index.html 설정 `/var/www/html/index.html`
+Flask app 파일 설정 `app.py`
 ```bash
-<html><h1>Hello EC2 Server!</h1></html>
+cat <<EOF > app.py
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+    return "Hello, EC2!"
+
+if __name__ == "__main__":
+        app.run(debug=True, host='0.0.0.0', port=5000)
+EOF
 ```
 
-브라우져에서 EC2 `Public IPv4 address` 접속 및 페이지 확인
+Flask app 실행
+```bash
+python3 app.py
+```
+
+[EC2 콘솔](https://ap-northeast-2.console.aws.amazon.com/ec2/v2/home?region=ap-northeast-2#Instances:instanceState=running) 
+에서 **Public IPv4 address** 확인 혹은 리눅스 커멘드로 `curl ifconfig.me` 후 해당 IP에 Flask 포트(5000) 으로 접속 및 페이지 확인
+
+(옵션) Flask에 CSS, HTML 페이지를 구성 하고 싶을 경우 아래 코드를 참고
+
+[simple-flask-web-app](https://github.com/cloudacode/coolstuff/tree/main/simple-flask-web)
+
+🎉 Congratulations, you have completed EC2, Flask setup tutorial 

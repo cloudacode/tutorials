@@ -1,4 +1,4 @@
-# GCP - Compute Engine 구축
+# Launch a GCE, Deploy Flask app
 
 **GCP 환경 구성 및 Compute Engine 구축**
 
@@ -28,7 +28,28 @@ https://console.cloud.google.com/compute
   - Service account: 인스턴스, 인스턴스에서 실행되는 앱이 다른 GCP 서비스와 상호작용 할때 필요한 서비스 계정(`변경 없음`)
   - Access scopes: 접근 범위(`Allow default access`)
 - Firewall: 방화벽
-  - Allow HTTP traffic (`체크`)
+  - Allow HTTP traffic (`변경 없음`)
+
+### Create a firewall
+
+Flask 서비스 포트(5000)을 custom하게 firewall에 추가가 필요
+
+
+![gcp-vpc-firewall](assets/gcp-vpc-firewall.png)로 접속 하여 **Create Firewall Rule** 선택 후 아래와 같이 입력
+
+- Name: default-flask-app
+- Network: default
+- Prioity: 1000
+- Direction of traffic: ingress
+- Action on match: Allow
+- Targets: All instances in the network
+- Source filter: IP ranges
+- Source IP Ranges: `0.0.0.0/0`
+- Protocol and ports:
+    - Specified protocols and ports: `tcp` `5000`
+
+!!! Note
+    만약 node.js 혹은 django 로 실습을 수행할 시에 해당 포트에 맞게 Custom TCP port 설정 변경
 
 ## 2. Access a GCE instance
 
@@ -41,12 +62,44 @@ Cloud Shell이 열리고 인스턴스 접근에 대한 커멘드 라인이 자�
 * SSH Key 생성이 이루어지고 추가 입력값 없이 빈칸으로 진행
 
 
-## 3. Install httpd on Linux
+## 3. Run Python Flask on GCE server
 
-접근한 Linux에서 Nginx 설치
+GCE 리눅스 서버에 접속 후 python3-pip 패키지 설치
 ```bash
-sudo apt-get update
-sudo apt-get install nginx -y
+sudo apt update
+sudo apt install python3-pip
 ```
 
-브라우져에서 GCE `http://EXTERNAL_IP/` 접속 및 페이지 확인
+접근한 Linux에서 Flask 설치
+```bash
+pip3 install Flask
+pip3 freeze > requirements.txt
+```
+
+Flask app 파일 설정 `app.py`
+```bash
+cat <<EOF > app.py
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+    return "Hello, GCE!"
+
+if __name__ == "__main__":
+        app.run(debug=True, host='0.0.0.0', port=5000)
+EOF
+```
+
+Flask app 실행
+```bash
+python3 app.py
+```
+
+GCE의 External IP를 확인 후 해당 IP에 Flask Port(5000)으로 접속 및 페이지 확인
+
+(옵션) Flask에 CSS, HTML 페이지를 구성 하고 싶을 경우 아래 코드를 참고
+
+[simple-flask-web-app](https://github.com/cloudacode/coolstuff/tree/main/simple-flask-web)
+
+🎉 Congratulations, you have completed GCE, Flask setup tutorial 
