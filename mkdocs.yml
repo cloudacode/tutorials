@@ -1,25 +1,25 @@
 # Project information
-site_name: CLOUDACODE - cloud, devops, kubernetes, and cncf
-site_url: https://cloudacode.github.io/tutorials/
+site_name: CLOUDACODE - get started with step-by-step tutorials
+site_url: https://cloudacode.com/tutorials/
 site_author: KC Chang
 
 # Repository
 repo_name: cloudacode/tutorials
-repo_url: https://github.com/cloudacode/tutorials
+repo_url: https://cloudacode.com/cloudacode/tutorials
 edit_uri: ""
 
 # Configuration
 theme:
   name: material
   palette:
-    - scheme: slate
-      toggle:
-        icon: material/weather-night
-        name: Switch to light mode
     - scheme: default
       toggle:
         icon: material/weather-sunny
         name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
 
 markdown_extensions:
   - admonition
