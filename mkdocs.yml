@@ -11,8 +11,19 @@ edit_uri: ""
 # Configuration
 theme:
   name: material
+  palette:
+    - scheme: slate
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+    - scheme: default
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+
 markdown_extensions:
   - admonition
+  - pymdownx.highlight
 
 # Page tree
 nav:
@@ -24,6 +35,8 @@ nav:
         - cloud/aws/apache-tomcat-redis.md
       - GCP:
         - cloud/gcp/gcp-ce-setup.md
+    - Python:
+      - python/flask/simple-flask-app.md
   #   - DevOps(CI/CD):
   #   - DevOps(Terraform):
   #   - Kubernetes:
