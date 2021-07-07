@@ -36,7 +36,7 @@ nav:
       - GCP:
         - cloud/gcp/gcp-ce-setup.md
     - Python:
-      - python/flask/simple-flask-app.md
+      - python/flask/simple-flask-app-mariadb.md
   #   - DevOps(CI/CD):
   #   - DevOps(Terraform):
   #   - Kubernetes:
