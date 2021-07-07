@@ -5,7 +5,7 @@ site_author: KC Chang
 
 # Repository
 repo_name: cloudacode/tutorials
-repo_url: https://cloudacode.com/cloudacode/tutorials
+repo_url: https://github.com/cloudacode/tutorials
 edit_uri: ""
 
 # Configuration
@@ -44,4 +44,4 @@ nav:
   #   - CNCF:
   #   - ETC:
   - Blog ⧉: https://medium.com/@cloudacode
-  - PodCast ⧉: https://www.podbbang.com/channels/1779436
+  - Youtube ⧉: https://www.youtube.com/channel/UCw46J_QQ3-HrjPsSsuOSDdQ
