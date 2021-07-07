@@ -19,6 +19,10 @@ Flask로 Web App을 개발을 하고 데이터베이스와 연동을 하는 방�
 
 - Download stable [Docker](https://docs.docker.com/get-docker/)
 
+## Architecture
+
+![docker-flask-mariadb](../assets/docker-flask-mariadb.jpeg)
+
 ## 1. Create a container test network
 
 ```bash
@@ -26,7 +30,7 @@ docker network create test-net
 ```
 `test-net` is newly created docker network for this tutorial (other than bridge as the default network)
 
-## 1. Provision a DB container
+## 2. Provision a DB container
 
 ### Start predefined mariadb container
 
@@ -123,7 +127,3 @@ docker run -p 5000:5000 --net test-net --env-file ./env.list cloudacode/cloudfla
 
 !!! Note
     If you are using your own password or database name, you need to update the vaule in the env.list file
-
-## 5. Architecture
-
-![docker-flask-mariadb](../assets/docker-flask-mariadb.jpeg)
