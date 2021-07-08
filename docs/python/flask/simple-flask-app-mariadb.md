@@ -121,8 +121,41 @@ docker built -t cloudacode/cloudflask:v1.0.0 .
 
 ## 4. Run the Flask app
 
+run the flask app on your localhost or dev machine
 ```bash
-docker run -p 5000:5000 --net test-net --env-file ./env.list cloudacode/cloudflask:v1.0.0
+docker run -p 5000:5000 --net test-net --env-file ./env.list cloudacode/cloudflask:v1.1.0
+```
+
+## 5. Test API request
+
+get date from the server. you can also use the web browser to get the date
+```bash
+curl localhost:5000/user
+```
+
+review the output. here is the expected output message
+```json
+[
+  {
+    "user_bio": "mento",
+    "user_email": "cloudacode@gmail.com",
+    "user_id": 1,
+    "user_name": "kc chang"
+  }
+]
+```
+
+post Json data to the server
+```bash
+curl --header "Content-Type: application/json" \
+--request POST \
+--data '{"bio": "test user", "email": "cloudacode@gmail.com", "name": "test1"}' \
+http://localhost:5000/add
+```
+
+get the user list again from the server
+```bash
+curl localhost:5000/user
 ```
 
 !!! Note
