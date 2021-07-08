@@ -119,3 +119,5 @@ http://localhost:8000 를 통해 웹 페이지 값을 확인
 - https://docs.aws.amazon.com/ko_kr/whitepapers/latest/practicing-continuous-integration-continuous-delivery/practicing-continuous-integration-continuous-delivery.pdf
 - https://docs.aws.amazon.com/ko_kr/codebuild/latest/userguide/sample-docker.html
 - https://docs.aws.amazon.com/ko_kr/codebuild/latest/userguide/github-webhook.html
+
+🎉 Congratulations, you have completed Continuous integration tutorial 

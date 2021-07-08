@@ -127,3 +127,6 @@ docker run -p 5000:5000 --net test-net --env-file ./env.list cloudacode/cloudfla
 
 !!! Note
     If you are using your own password or database name, you need to update the vaule in the env.list file
+
+
+🎉 Congratulations, you have completed Flask, MariaDB integration tutorial 
