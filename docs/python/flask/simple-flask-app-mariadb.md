@@ -2,7 +2,7 @@
 
 In this tutorial, you will learn how to build a Flask web application and implement the app with database(MariaDB). using postman to test basic REST APIs(HTTP methods: GET, POST, DELETE). 
 
-Flask로 Web App을 개발을 하고 데이터베이스와 연동을 하는 방법을 알아본다. Postman을 사용 하여 기본적인 REST API(HTTP methods: GET, POST, DELETE)를 테스트 해본다.  
+Flask로 Web App을 개발을 하고 데이터베이스와 연동을 하는 방법을 알아본다. CURL을 사용 하여 기본적인 REST API(HTTP methods: GET, POST, DELETE)를 테스트 해본다.  
 
 **Time to Complete: 1-2 hours**
 
@@ -126,6 +126,9 @@ run the flask app on your localhost or dev machine
 docker run -p 5000:5000 --net test-net --env-file ./env.list cloudacode/cloudflask:v1.1.0
 ```
 
+!!! Note
+    If you are using your own password or database name, you need to replace the vaule in the `env.list` file
+
 ## 5. Test API request
 
 get date from the server. you can also use the web browser to get the date
@@ -157,9 +160,6 @@ get the user list again from the server
 ```bash
 curl localhost:5000/user
 ```
-
-!!! Note
-    If you are using your own password or database name, you need to update the vaule in the env.list file
 
 
 🎉 Congratulations, you have completed Flask, MariaDB integration tutorial 

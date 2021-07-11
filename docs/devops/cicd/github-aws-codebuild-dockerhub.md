@@ -1,4 +1,4 @@
-# Continuous Integration 실습 
+# Publishing Docker images - AWS CodeBuild
 
 **개발 빌드 환경 구성 및 Container 빌드 자동화 실습**
 
@@ -109,7 +109,7 @@ CI 도구가 변경 사항을 인지하여 자동으로 수행 되는지 확인
 
 Docker run
 ```
-docker run -p 8000:8000 --name devops -d [DockerHub Repo]:latest
+docker run -p 8000:8000 --name devops -d [DockerHub Repo]:[Tag version]
 ```
 
 http://localhost:8000 를 통해 웹 페이지 값을 확인
@@ -120,4 +120,4 @@ http://localhost:8000 를 통해 웹 페이지 값을 확인
 - https://docs.aws.amazon.com/ko_kr/codebuild/latest/userguide/sample-docker.html
 - https://docs.aws.amazon.com/ko_kr/codebuild/latest/userguide/github-webhook.html
 
-🎉 Congratulations, you have completed Continuous integration tutorial 
+🎉 Congratulations, you have completed Publishing Docker images - AWS CodeBuild tutorial 
