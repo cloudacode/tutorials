@@ -21,12 +21,28 @@ CI 도구([aws codebuild](https://aws.amazon.com/codebuild/))를 통해 소스 �
 
 [Build Specification reference 문서](https://docs.aws.amazon.com/ko_kr/codebuild/latest/userguide/build-spec-ref.html)
 
-예제 파일 구조는 다음을 따른다
-```bash
-├── buildspec.yml
-├── Dockerfile
-└── flask-app/*
-```  
+예시)
+```yaml
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Docker Hub...
+      - docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PW
+      - TAG="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t $IMAGE_REPO_NAME:$TAG .
+      - docker tag $IMAGE_REPO_NAME:$TAG $IMAGE_REPO_NAME:$TAG
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push $IMAGE_REPO_NAME:$TAG
+```
 
 ### Setup the codebuild
 
@@ -42,17 +58,17 @@ https://ap-northeast-2.console.aws.amazon.com/codesuite/codebuild/projects
 4. 환경: 관리형 이미지, Ubuntu, Standard, aws/codebuild/standard:4.0, 권한 승격 활성화
 5. 서비스 역할: 새 서비스 역할 (Name: default e.g., codebuild-*[project_name]*-service-role)
    
-   !!! note:
+!!! Note
       CodeBuild 프로젝트 생성 후 IAM에서 추후 업데이트 필요
 
 6. Additional configuration 에 환경 변수 설정:
    
-   - TAG_VERSION(*일반 텍스트*): `latest `
+   - TAG_VERSION(*일반 텍스트*): `latest`
    - IMAGE_REPO_NAME(*일반 텍스트*): `[Docker Repo Name]` e.g., cloudacode/devops-flask
    - DOCKERHUB_USER(*Secrets Manager*): `dockerhub:username`
    - DOCKERHUB_PW(*Secrets Manager*): `dockerhub:password`
    
-   !!! note:
+!!! Note
       username, password 보안을 위해 Secrets Manager를 활용하여 암호 관리 필요. [참고](https://aws.amazon.com/premiumsupport/knowledge-center/codebuild-docker-pull-image-error/?nc1=h_ls#Store_your_DockerHub_credentials_with_AWS_Secrets_Manager) 
 
 7. BuildSpec: default(빈칸) 혹은 `buildspec.yml` 입력
@@ -105,19 +121,11 @@ https://hub.docker.com
 ![PR](./assets/build_process_by_github_webhook.png)
 CI 도구가 변경 사항을 인지하여 자동으로 수행 되는지 확인
 
-### (옵션) Docker image 로컬 테스트
 
-Docker run
-```
-docker run -p 8000:8000 --name devops -d [DockerHub Repo]:[Tag version]
-```
-
-http://localhost:8000 를 통해 웹 페이지 값을 확인
+🎉 Congratulations, you have completed Publishing Docker images - AWS CodeBuild tutorial 
 
 ## 참고 자료
 - https://docs.aws.amazon.com/ko_kr/whitepapers/latest/introduction-devops-aws/introduction-devops-aws.pdf
 - https://docs.aws.amazon.com/ko_kr/whitepapers/latest/practicing-continuous-integration-continuous-delivery/practicing-continuous-integration-continuous-delivery.pdf
 - https://docs.aws.amazon.com/ko_kr/codebuild/latest/userguide/sample-docker.html
 - https://docs.aws.amazon.com/ko_kr/codebuild/latest/userguide/github-webhook.html
-
-🎉 Congratulations, you have completed Publishing Docker images - AWS CodeBuild tutorial 

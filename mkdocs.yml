@@ -42,6 +42,7 @@ nav:
       - CICD:
         - devops/cicd/github-aws-codebuild-dockerhub.md
         - devops/cicd/github-action-dockerhub.md
+        - devops/cicd/aws-codepipeline-delivery-eb.md
   #   - DevOps(Terraform):
   #   - Kubernetes:
   #   - Monitoring: 
