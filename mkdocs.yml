@@ -34,6 +34,7 @@ nav:
         - cloud/aws/ec2-setup.md
         - cloud/aws/apache-tomcat-redis.md
         - cloud/aws/cloud9-python-docker.md
+        - cloud/aws/aws-lightsail-container.md
       - GCP:
         - cloud/gcp/gcp-ce-setup.md
     - Python:
