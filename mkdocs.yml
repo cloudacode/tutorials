@@ -40,6 +40,8 @@ nav:
         - cloud/gcp/gcp-ce-setup.md
     - Python:
       - python/flask/simple-flask-app-mariadb.md
+    - Kubernetes:
+      - kubernetes/argocd-deployment.md
     - DevOps:
       - CICD:
         - devops/cicd/github-aws-codebuild-dockerhub.md
