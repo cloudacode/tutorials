@@ -1,2 +1,4 @@
 ## Ignore Visual Studio code directorie(s)
 .vscode/
+
+.DS_Store

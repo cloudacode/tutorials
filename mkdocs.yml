@@ -38,6 +38,8 @@ nav:
         - cloud/aws/amazon-eks-setup.md
       - GCP:
         - cloud/gcp/gcp-ce-setup.md
+      - Openstack:
+        - cloud/openstack/install-openstack.md
     - Python:
       - python/flask/simple-flask-app-mariadb.md
     - Kubernetes:
