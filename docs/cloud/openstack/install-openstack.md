@@ -102,6 +102,8 @@ OS Version: Ubuntu 20.04 focal
 
 ## 6. Manage the instance
 
+![manage openstack instance](assets/manage-instance.png)
+
 ```bash
 #Enable NAT for the instance network(02:35)
 sudo iptables -t nat -A POSTROUTING -o ens5 \
