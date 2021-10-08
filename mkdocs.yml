@@ -8,6 +8,12 @@ repo_name: cloudacode/tutorials
 repo_url: https://github.com/cloudacode/tutorials
 edit_uri: ""
 
+# Google Analytics
+extra:
+  analytics:
+    provider: google
+    property: G-278065155
+
 # Configuration
 theme:
   name: material
