@@ -100,5 +100,18 @@ OS Version: Ubuntu 20.04 focal
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/7mbeZndZ4ZU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
+## 6. Manage the instance
+
+```bash
+#Enable NAT for the instance network(02:35)
+sudo iptables -t nat -A POSTROUTING -o ens5 \
+-s 172.24.4.0/24 -j MASQUERADE
+
+#Config port forward rule to expose network(24:35)
+sudo iptables -t nat -A PREROUTING -p tcp -i ens5 \
+--dport 8000 -j DNAT --to-destination 172.24.4.185:8000
+```
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/TyFfLZbKM9Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 🎉 Congratulations, you have completed Openstack tutorial 
