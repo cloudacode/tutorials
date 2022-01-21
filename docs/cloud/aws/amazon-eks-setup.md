@@ -130,7 +130,7 @@ ip-192-168-27-236.ap-northeast-2.compute.internal   Ready    <none>   19m   v1.1
 
 ### Database 배포
 
-쿠버네틱스에 DB app을 배포하기 위해 Deployment manifast 파일 작성
+[예제 todo 애플리케이션](https://github.com/cloudacode/coolstuff/tree/main/todo-flask-app)에서 로컬 sqlight DB 대신에 외부 RDBMS(mariadb, mysql등) 리소스를 연동 한 경우에는 쿠버네티스 위에 DB app을 배포 해야하므로 관련해 Deployment manifast 파일 작성
 
 Deployment 파일 구성 하기 [kuberentes deployment](https://kubernetes.io/ko/docs/concepts/workloads/controllers/deployment/)
 
@@ -152,7 +152,7 @@ spec:
         app: mysql
     spec:
       containers:
-      - image: cloudacode/mariadb:v1.1.0
+      - image: cloudacode/mariadb-todo:v1.0.1
         name: mysql
         ports:
         - containerPort: 3306
@@ -204,7 +204,7 @@ mysql-6fd94cc949-d8lj7   1/1     Running   0          23s
 
 ### Flask APP 배포
 
-쿠버네틱스에 Flask app을 배포하기 위해 Deployment manifast 파일 작성
+쿠버네티스에 Flask app을 배포하기 위해 Deployment manifast 파일 작성
 
 flask-deployment.yaml
 ```yaml
@@ -231,7 +231,7 @@ spec:
         app: cloud-flask
     spec:
       containers:
-      - image: cloudacode/cloudflask:v1.1.0
+      - image: cloudacode/python-todo:v1.1.0
         imagePullPolicy: Always
         name: cloud-flask
         ports:
@@ -243,7 +243,7 @@ spec:
         - name: DB_PASSWORD
           value: mysecret
         - name: DB_NAME
-          value: cloud_user
+          value: todo
         - name: DB_HOST
           value: mysql
 ```
