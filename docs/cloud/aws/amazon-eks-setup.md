@@ -6,6 +6,7 @@
 
 ## 사전 준비 사항
 
+
 ### AWS CLI 설정
 
 AWS CLI 설치: [관련 링크](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
@@ -17,6 +18,13 @@ AWS CLI 초기 설정: [관련 링크](https://docs.aws.amazon.com/cli/latest/us
 
 ## Architecture
 ![Architecture](assets/aws-eks-flask-db-app.png)
+
+<div>
+<a id="channel-add-button" target="_blank" href="http://pf.kakao.com/_nxoaTs">
+  <img src="../../../assets/channel_add_small.png" alt="kakao channel add button"/>
+</a>
+<a class="github-button" href="https://github.com/cloudacode/tutorials" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star cloudacode/tutorials on GitHub">Star</a>
+</div>
 
 ## 1. EKS 구성 하기
 
@@ -214,7 +222,6 @@ metadata:
   name: cloud-flask
   labels:
     app: cloud-flask
-  namespace: default
 spec:
   replicas: 1
   selector:
@@ -311,3 +318,14 @@ eksctl delete cluster --region=ap-northeast-2 --name=<your eks cluster name>
 https://aws.amazon.com/premiumsupport/knowledge-center/amazon-eks-cluster-access/
 
 https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/troubleshooting.html#unauthorized
+
+이 글이 유용하였다면 ⭐ Star를, 💬 1:1 질문이나 기술 관련 문의가 필요하신 분들은 클라우드어코드 카카오톡 채널 추가 부탁드립니다.🤗
+
+<div>
+<a id="channel-add-button" target="_blank" href="http://pf.kakao.com/_nxoaTs">
+  <img src="../../../assets/channel_add_small.png" alt="kakao channel add button"/>
+</a>
+<a class="github-button" href="https://github.com/cloudacode/tutorials" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star cloudacode/tutorials on GitHub">Star</a>
+</div>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>

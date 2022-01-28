@@ -13,10 +13,14 @@ Amazon EKS 구성: [관련 링크](../cloud/aws/amazon-eks-setup.md)
 ## Architecture
 ![Architecture](assets/argo-architecture.png)
 
-## ArgoCD 연동
+<div>
+<a id="channel-add-button" target="_blank" href="http://pf.kakao.com/_nxoaTs">
+  <img src="../../assets/channel_add_small.png" alt="kakao channel add button"/>
+</a>
+<a class="github-button" href="https://github.com/cloudacode/tutorials" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star cloudacode/tutorials on GitHub">Star</a>
+</div>
 
-### ArgoCD CLI 설치
-https://argoproj.github.io/argo-cd/cli_installation/
+## ArgoCD 연동
 
 ### ArgoCD 설치
 https://argoproj.github.io/argo-cd/getting_started/
@@ -27,7 +31,7 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/st
 ```
 This will create a new namespace, `argocd`, where Argo CD services and application resources will live.
 
-### ArgoCD CLI 설치
+### (옵션) ArgoCD CLI 설치
 
 Download the latest Argo CD version from [https://github.com/argoproj/argo-cd/releases/latest](https://github.com/argoproj/argo-cd/releases/latest). 
 
@@ -153,3 +157,14 @@ eksctl delete cluster --region=ap-northeast-2 --name=<your eks cluster name>
 
 ## Reference
 https://argoproj.github.io/argo-cd/getting_started
+
+이 글이 유용하였다면 ⭐ Star를, 💬 1:1 질문이나 기술 관련 문의가 필요하신 분들은 클라우드어코드 카카오톡 채널 추가 부탁드립니다.🤗
+
+<div>
+<a id="channel-add-button" target="_blank" href="http://pf.kakao.com/_nxoaTs">
+  <img src="../../assets/channel_add_small.png" alt="kakao channel add button"/>
+</a>
+<a class="github-button" href="https://github.com/cloudacode/tutorials" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star cloudacode/tutorials on GitHub">Star</a>
+</div>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
