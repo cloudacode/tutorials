@@ -19,6 +19,13 @@ Please be sure to terminate all of the resources created during this workshop to
 ### System Architecture
 ![Architecture](assets/3tier-architecture.png)
 
+<div>
+<a id="channel-add-button" target="_blank" href="http://pf.kakao.com/_nxoaTs">
+  <img src="../../../assets/channel_add_small.png" alt="kakao channel add button"/>
+</a>
+<a class="github-button" href="https://github.com/cloudacode/tutorials" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star cloudacode/tutorials on GitHub">Star</a>
+</div>
+
 ## 1. Create a Web Server
 
 ### Create EC2 instances
@@ -440,3 +447,13 @@ Congratulations, you have completed WEB, WAS, DB tutorial
 ## Reference
 - https://www.digitalocean.com/community/questions/apache-virtual-host-with-multiple-tomcat-server
 - https://github.com/redisson/redisson/wiki/2.-Configuration#221-yaml-file-based-configuration
+
+
+<div>
+<a id="channel-add-button" target="_blank" href="http://pf.kakao.com/_nxoaTs">
+  <img src="../../../assets/channel_add_small.png" alt="kakao channel add button"/>
+</a>
+<a class="github-button" href="https://github.com/cloudacode/tutorials" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star cloudacode/tutorials on GitHub">Star</a>
+</div>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
