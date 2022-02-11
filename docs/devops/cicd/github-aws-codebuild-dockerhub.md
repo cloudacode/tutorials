@@ -13,6 +13,13 @@ CI 도구([aws codebuild](https://aws.amazon.com/codebuild/))를 통해 소스 �
 ## System Architecture
 ![ci system architecture](assets/ci-system-architecture.png)
 
+<div>
+<a id="channel-add-button" target="_blank" href="http://pf.kakao.com/_nxoaTs">
+  <img src="../../../assets/channel_add_small.png" alt="kakao channel add button"/>
+</a>
+<a class="github-button" href="https://github.com/cloudacode/tutorials" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star cloudacode/tutorials on GitHub">Star</a>
+</div>
+
 ## 1. Create an AWS CodeBuild Project
 
 ### Make a BuildSpec file for CodeBuild
@@ -30,7 +37,7 @@ phases:
     commands:
       - echo Logging in to Docker Hub...
       - docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PW
-      - TAG="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
+      - TAG=$TAG_VERSION
   build:
     commands:
       - echo Build started on `date`
@@ -44,6 +51,11 @@ phases:
       - docker push $IMAGE_REPO_NAME:$TAG
 ```
 
+만약 TAG 버전을 unique한 commit hash로 저장 하고 싶다면 
+```yaml
+      - TAG="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
+```
+
 ### Setup the codebuild
 
 https://ap-northeast-2.console.aws.amazon.com/codesuite/codebuild/projects
@@ -55,7 +67,7 @@ https://ap-northeast-2.console.aws.amazon.com/codesuite/codebuild/projects
 3. 이벤트 유형: `PULL_REQUEST_CREATED`, `PULL_REQUEST_UPDATED`, `PULL_REQUEST_REOPENED`
    - 특정 Branch 이름이나 Tag로 이벤트를 감지 하고 싶다면 `Start a build under these condition`에 필터 추가 [참고 문서](https://docs.aws.amazon.com/codebuild/latest/userguide/github-webhook.html)
    e.g., feature/ 브랜치 이벤트만 `HEAD_REF: ^refs/heads/feature/*`
-4. 환경: 관리형 이미지, Ubuntu, Standard, aws/codebuild/standard:4.0, 권한 승격 활성화
+4. 환경: 관리형 이미지, Ubuntu, Standard, aws/codebuild/standard:5.0, 권한 승격 활성화 (Enable this flag if you want to build Docker images or want your builds to get elevated privileges)
 5. 서비스 역할: 새 서비스 역할 (Name: default e.g., codebuild-*[project_name]*-service-role)
    
 !!! Note
@@ -63,7 +75,7 @@ https://ap-northeast-2.console.aws.amazon.com/codesuite/codebuild/projects
 
 6. Additional configuration 에 환경 변수 설정:
    
-   - TAG_VERSION(*일반 텍스트*): `latest`
+   - TAG_VERSION(*일반 텍스트*): `latest` , 위에서 TAG_VERSION을 commit hash로 받는 설정을 하였을 경우는 설정 필요 없음
    - IMAGE_REPO_NAME(*일반 텍스트*): `[Docker Repo Name]` e.g., cloudacode/devops-flask
    - DOCKERHUB_USER(*Secrets Manager*): `dockerhub:username`
    - DOCKERHUB_PW(*Secrets Manager*): `dockerhub:password`
@@ -121,8 +133,18 @@ https://hub.docker.com
 ![PR](./assets/build_process_by_github_webhook.png)
 CI 도구가 변경 사항을 인지하여 자동으로 수행 되는지 확인
 
-
 🎉 Congratulations, you have completed Publishing Docker images - AWS CodeBuild tutorial 
+
+이 글이 유용하였다면 ⭐ Star를, 💬 1:1 질문이나 기술 관련 문의가 필요하신 분들은 클라우드어코드 카카오톡 채널 추가 부탁드립니다.🤗
+
+<div>
+<a id="channel-add-button" target="_blank" href="http://pf.kakao.com/_nxoaTs">
+  <img src="../../../assets/channel_add_small.png" alt="kakao channel add button"/>
+</a>
+<a class="github-button" href="https://github.com/cloudacode/tutorials" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star cloudacode/tutorials on GitHub">Star</a>
+</div>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
 
 ## 참고 자료
 - https://docs.aws.amazon.com/ko_kr/whitepapers/latest/introduction-devops-aws/introduction-devops-aws.pdf
