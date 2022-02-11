@@ -15,6 +15,13 @@ CI/CD Pipeline 도구를 통해 소스 관리, 도커 빌드 자동화, 서비�
 ## System Architecture
 ![Architecture](./assets/continuous-delivery-codepipeline.png)
 
+<div>
+<a id="channel-add-button" target="_blank" href="http://pf.kakao.com/_nxoaTs">
+  <img src="../../../assets/channel_add_small.png" alt="kakao channel add button"/>
+</a>
+<a class="github-button" href="https://github.com/cloudacode/tutorials" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star cloudacode/tutorials on GitHub">Star</a>
+</div>
+
 ## 1. Setup ElasticBeanstalk
 
 [ElasticBeanstalk Console](https://ap-northeast-2.console.aws.amazon.com/elasticbeanstalk/home?region=ap-northeast-2#/welcome)
@@ -31,6 +38,16 @@ EB(ElasticBeanstalk) app 생성 확인까지 약 5분 소요
 
 CodePipline의 명세서 buildspec.yml 을 작성
 
+[앞 실습](./github-aws-codebuild-dockerhub.md)에서 만들었던 Buidspec 파일에 Elastic Beanstalk에서 실행할 docker image 정보를 artifact로 넘겨주기 위한 설정을 추가
+
+```yaml
+      - echo Writing image definitions file...
+      - printf '{"AWSEBDockerrunVersion":"1","Image":{"Name":"%s"},"Ports":[{"ContainerPort":"5000"}]}' $IMAGE_REPO_NAME:$TAG > Dockerrun.aws.json
+artifacts:
+    files: Dockerrun.aws.json
+``` 
+
+예시)
 ```bash
 version: 0.2
 
@@ -39,20 +56,20 @@ phases:
     commands:
       - echo Logging in to Docker Hub...
       - docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PW
-      - TAG_VERSION="latest"
+      - TAG="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t $IMAGE_REPO_NAME:$TAG_VERSION .
-      - docker tag $IMAGE_REPO_NAME:$TAG_VERSION $IMAGE_REPO_NAME:$TAG_VERSION
+      - docker build -t $IMAGE_REPO_NAME:$TAG .
+      - docker tag $IMAGE_REPO_NAME:$TAG $IMAGE_REPO_NAME:$TAG
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
-      - docker push $IMAGE_REPO_NAME:$TAG_VERSION
+      - docker push $IMAGE_REPO_NAME:$TAG
       - echo Writing image definitions file...
-      - printf '{"AWSEBDockerrunVersion":"1","Image":{"Name":"%s"},"Ports":[{"ContainerPort":"8000"}]}' $IMAGE_REPO_NAME:$TAG_VERSION > Dockerrun.aws.json
+      - printf '{"AWSEBDockerrunVersion":"1","Image":{"Name":"%s"},"Ports":[{"ContainerPort":"5000"}]}' $IMAGE_REPO_NAME:$TAG > Dockerrun.aws.json
 artifacts:
     files: Dockerrun.aws.json
 ```
@@ -80,13 +97,11 @@ artifacts:
 ### Step 3: Build Stage
 
 [앞 실습](./github-aws-codebuild-dockerhub.md)
-에서 설정한 codebuild 프로젝트 활용
+에서 설정한 codebuild 프로젝트 활용, 만약 새로운 codebuild project를 생성할 경우 앞 실습 가이드라인에 따라서 프로젝트 생성
 
 ### Step 4: Deploy Stage
 1. Provider: AWS Elastic Beanstalk
 2. Application Name, Environment Name: 위에서 자동 생성한 [EB 정보](#create-applicationcreate-a-web-app)
-
-구성 완료후 [앞 실습](./github-aws-codebuild-dockerhub.md#add-permission-in-iam-role)과 동일하게 IAM에 권한 부여
 
 ## 4. Verify CodePipeline
 
@@ -102,9 +117,18 @@ Pipeline 도구가 변경 사항을 인지하여 자동으로 빌드/배포가 �
 
 EB의 애플리케이션 [환경 URL](#create-applicationcreate-a-web-app) 확인 후 정상적으로 웹페이지에 변경이 일어났는지 확인
 
-
-
 🎉 Congratulations, you have completed Continuous delivery - AWS CodePipeline tutorial
+
+이 글이 유용하였다면 ⭐ Star를, 💬 1:1 질문이나 기술 관련 문의가 필요하신 분들은 클라우드어코드 카카오톡 채널 추가 부탁드립니다.🤗
+
+<div>
+<a id="channel-add-button" target="_blank" href="http://pf.kakao.com/_nxoaTs">
+  <img src="../../../assets/channel_add_small.png" alt="kakao channel add button"/>
+</a>
+<a class="github-button" href="https://github.com/cloudacode/tutorials" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star cloudacode/tutorials on GitHub">Star</a>
+</div>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
 
 ## 참고 자료
 
