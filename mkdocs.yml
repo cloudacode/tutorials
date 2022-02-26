@@ -49,6 +49,7 @@ nav:
     - Python:
       - python/flask/simple-flask-app-mariadb.md
     - Kubernetes:
+      - kubernetes/minikube-todo-app.md
       - kubernetes/argocd-deployment.md
     - DevOps:
       - CICD:
