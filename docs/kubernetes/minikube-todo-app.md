@@ -2,7 +2,7 @@
 
 **Minikube를 활용하여 로컬환경에 Todo App 배포**
 
-이번 실습은 쿠버네티스에 python flask 어플리케이션과 mariaDB를 배포 해보고 접근 해보는 실습 입니다. 쿠버네티스에 어플리케이션 배포 방법과 서비스 노출 방법에 대해 이해 할 수 있습니다.
+이번 실습은 쿠버네티스에 Python flask 어플리케이션과 mariaDB를 배포 해보고 접근 해보는 실습 입니다. 쿠버네티스에 DB용 영구볼륨(PersistentVolume)구성 방법 및 어플리케이션 배포 방법과 서비스 노출 방법에 대해 이해 할 수 있습니다.
 
 ## 사전 준비 사항
 
@@ -26,9 +26,58 @@ Minikube 구성: [관련 링크](https://minikube.sigs.k8s.io/docs/start/)
 
 Run `minikube start` to start minikube locally
 
-### Todo app용 mariadb 배포
+### Todo Data Volume 생성
+
+Run `kubectl apply -f todo-mariadb-pv.yaml` to create persistent data volume for the mariadb.
+
+todo-mariadb-pv.yaml
+```yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: task-data-volume
+  labels:
+    classname: mini
+spec:
+  storageClassName: mini
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /data/task-data/
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: task-data-claim
+  labels:
+    classname: mini
+spec:
+  storageClassName: mini
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+```
+
+Run `kubectl get pv,pvc -l classname=mini ` to verify the pv and pvc are created properly
+
+```bash
+$ kubectl get pv,pvc -l classname=mini
+NAME                                CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                     STORAGECLASS   REASON   AGE
+persistentvolume/task-data-volume   1Gi        RWO            Retain           Bound    default/task-data-claim   mini                    11s
+
+NAME                                    STATUS   VOLUME             CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+persistentvolumeclaim/task-data-claim   Bound    task-data-volume   1Gi        RWO            mini           11s
+```
+
+### Todo App용 Mariadb 배포
 
 Source code: [cloudacode/coolstuff/todo-mariadb](https://github.com/cloudacode/coolstuff/tree/main/todo-app/mariadb-app)
+
+Run `kubectl apply -f todo-mariadb-app.yaml` to deploy mariadb and service endpoint
 
 todo-mariadb-app.yaml
 ```yaml
@@ -67,11 +116,11 @@ spec:
   clusterIP: None
 ```
 
-Run `kubectl apply -f todo-mariadb-app.yaml` to deploy mariadb and service endpoint
-
-### Todo app용 flask 배포
+### Todo App용 Flask 배포
 
 Source code: [cloudacode/coolstuff/todo-flask-app](https://github.com/cloudacode/coolstuff/tree/main/todo-app/flask-app)
+
+Run `kubectl apply -f todo-flask-app.yaml` to deploy flask app and service endpoint
 
 todo-flask-app.yaml
 ```yaml
@@ -89,8 +138,8 @@ spec:
       app: todo-app
   strategy:
     rollingUpdate:
-      maxSurge: 20%
-      maxUnavailable: 20%
+      maxSurge: 1
+      maxUnavailable: 0
     type: RollingUpdate
   template:
     metadata:
@@ -128,8 +177,6 @@ spec:
   type: LoadBalancer
 ```
 
-Run `kubectl apply -f todo-flask-app.yaml` to deploy flask app and service endpoint
-
 Run `kubectl get svc` in check the exposed service. you may see the `EXTERNAL-IP` is `pending` status due to minikube doesn't have extra LB. 
 
 ```bash
@@ -161,13 +208,13 @@ NAME           TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
 todo-app-svc   LoadBalancer   10.102.161.248   127.0.0.1     80:31289/TCP   5m41s
 ``` 
 
-### Todo app 접근
+### Todo App 접근
 
 Open `http://127.0.0.1` in your favorite web browser and check the flask todo app
 
 ![Task Web](assets/task-web.png)
 
-### Todo app 리소스 확장
+### Todo App 리소스 확장
 
 Run `kubectl scale --replicas=3 deployment/todo-app` to scale out the app
 
