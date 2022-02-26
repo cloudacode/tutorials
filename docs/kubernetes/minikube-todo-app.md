@@ -169,7 +169,7 @@ Open `http://127.0.0.1` in your favorite web browser and check the flask todo ap
 
 ### Todo app 리소스 확장
 
-Run `kubectl scale --replicas=3 deployment/todo-app` to scale up the app
+Run `kubectl scale --replicas=3 deployment/todo-app` to scale out the app
 
 ```
 $ kubectl scale --replicas=3 deployment/todo-app
