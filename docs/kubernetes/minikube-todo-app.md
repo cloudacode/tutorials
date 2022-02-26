@@ -103,6 +103,13 @@ spec:
         ports:
         - containerPort: 3306
           name: mysql
+        volumeMounts:
+        - name: task-data-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: task-data-storage
+        persistentVolumeClaim:
+          claimName: task-data-claim
 ---
 apiVersion: v1
 kind: Service
@@ -213,6 +220,20 @@ todo-app-svc   LoadBalancer   10.102.161.248   127.0.0.1     80:31289/TCP   5m41
 Open `http://127.0.0.1` in your favorite web browser and check the flask todo app
 
 ![Task Web](assets/task-web.png)
+
+### Todo MariaDB Pod 삭제 및 재배포
+
+위에서 세팅한 Persistent Volume이 Pod의 내부 볼륨이 아닌 외부 스토리지 볼륨을 사용하는 것을 검증 하기 위해 pod를 삭제
+
+Run `kubectl delete pods -l app=todo-db` to delete the pod resource. Deployment resource will monitor the pod status and will spawn the pod immediately
+
+```bash
+$ kubectl get pods -l app=todo-db
+NAME                       READY   STATUS    RESTARTS   AGE
+todo-db-65848c57db-hwqnp   1/1     Running   0          17s
+```
+
+A new todo-db pod is up and mounted node's `/data/task-data/` to `/var/lib/mysql/` volume on the pod. This means that DB data volume is managed in an external volume space.
 
 ### Todo App 리소스 확장
 
