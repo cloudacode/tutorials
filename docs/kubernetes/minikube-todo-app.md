@@ -235,6 +235,8 @@ todo-db-65848c57db-hwqnp   1/1     Running   0          17s
 
 A new todo-db pod is up and mounted node's `/data/task-data/` to `/var/lib/mysql/` volume on the pod. This means that DB data volume is managed in an external volume space.
 
+확인을 위해 open `http://127.0.0.1` and make sure the todo data exists.
+
 ### Todo App 리소스 확장
 
 Run `kubectl scale --replicas=3 deployment/todo-app` to scale out the app
