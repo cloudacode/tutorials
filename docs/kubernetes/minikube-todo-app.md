@@ -183,11 +183,11 @@ todo-app-576d68cf7f-w8x8q   0/1     ContainerCreating   0          5s
 ```
 
 ## Clean Up
-kubectl 명령어로 배포한 리소스를 정리
+배포한 리소스(deployments, service) 정리
 
 ```
-$ kubectl delete -f k8s-manifest/todo-flask-app.yaml
-$ kubectl delete -f k8s-manifest/todo-mariadb-app.yaml
+$ kubectl delete -f todo-flask-app.yaml
+$ kubectl delete -f todo-mariadb-app.yaml
 ```
 
 
