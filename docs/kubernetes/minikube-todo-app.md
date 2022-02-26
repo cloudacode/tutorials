@@ -28,6 +28,8 @@ Run `minikube start` to start minikube locally
 
 ### Todo app용 mariadb 배포
 
+Source code: [cloudacode/coolstuff/todo-mariadb](https://github.com/cloudacode/coolstuff/tree/main/todo-app/mariadb-app)
+
 todo-mariadb-app.yaml
 ```yaml
 ---
@@ -68,6 +70,8 @@ spec:
 Run `kubectl apply -f todo-mariadb-app.yaml` to deploy mariadb and service endpoint
 
 ### Todo app용 flask 배포
+
+Source code: [cloudacode/coolstuff/todo-flask-app](https://github.com/cloudacode/coolstuff/tree/main/todo-app/flask-app)
 
 todo-flask-app.yaml
 ```yaml
