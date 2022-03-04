@@ -128,7 +128,7 @@ aws lightsail get-container-services --service-name todo-service
 
 ## 4. 환경 삭제
 
-[Lightsail 콘솔](https://lightsail.aws.amazon.com/ls/webapp/ap-northeast-2/container-services/devops-flask-service/deployments) 혹은 aws lightsail cli 로 삭제
+[Lightsail 콘솔](https://lightsail.aws.amazon.com/ls/webapp/home/containers) 혹은 aws lightsail cli 로 삭제
 
 ```bash
 aws lightsail delete-container-service --service-name todo-service
