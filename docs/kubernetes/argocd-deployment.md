@@ -84,7 +84,7 @@ https://argoproj.github.io/argo-cd/getting_started/#4-login-using-the-cli
   - Sync Policy: Manual
 - SOURCE
   - Repo URL: https://prometheus-community.github.io/helm-charts `HELM`
-  - Chart: prometheus `13.6.0`
+  - Chart: prometheus `15.1.1`
 - DESTINATION
   - Cluster URL: https://kubernetes.default.svc
   - Namespace: default
@@ -114,7 +114,7 @@ prometheus-server   ClusterIP   10.100.238.196   <none>        80/TCP    5m44s
   - Sync Policy: Manual
 - SOURCE
   - Repo URL: https://grafana.github.io/helm-charts `HELM`
-  - Chart: prometheus `6.6.2`
+  - Chart: prometheus `6.21.1`
 - DESTINATION
   - Cluster URL: https://kubernetes.default.svc
   - Namespace: default
@@ -140,7 +140,8 @@ SAVE & TEST 하여 Data Source 등록
 
 
 왼쪽 텝 __+__ Import -> Upload Json File:
-[kubernetes-cluster-prometheus_rev1.json](assets/kubernetes-cluster-prometheus_rev1.json) 업로드
+[k8s-metric-dashboard_rev1.json](https://raw.githubusercontent.com/cloudacode/coolstuff/main/grafana-dashboard/k8s-metric-dashboard_rev1.json) 업로드
+
 
 Options
   - prometheus: `Promethesus`
