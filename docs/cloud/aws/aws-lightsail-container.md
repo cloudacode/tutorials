@@ -21,7 +21,7 @@
 [설치 페이지](https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-install-software#install-software-aws-cli)
 
 !!! Warning
-    Cloud9은 AWS cli version이 낮고 IAM 권한이 제한 되기 때문에 local 개발 환경에서 실습 진행
+    Cloud9은 CLI 버전이 1이고 IAM 권한이 제한 되기 때문에 local 개발 환경에서 실습 진행
 
 
 ## 1. Create a Container server on lightsail
