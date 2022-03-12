@@ -16,9 +16,13 @@
 **Tutorial Prereqs:**
 
 * **An AWS Account and Administrator-level or PowerUser-level access to it**
-* **본인이 생성한 컨테이너 이미지** [devops-flask](https://hub.docker.com/repository/docker/cloudacode/devops-flask)
+* **본인이 생성한 컨테이너 이미지** [freecode-todo](https://hub.docker.com/repository/docker/cloudacode/freecodetodo)
 * **AWS CLI 및 Lightsail Plugin설치**
 [설치 페이지](https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-install-software#install-software-aws-cli)
+
+!!! Warning
+    Cloud9은 AWS cli version이 낮고 IAM 권한이 제한 되기 때문에 local 개발 환경에서 실습 진행
+
 
 ## 1. Create a Container server on lightsail
 
@@ -30,7 +34,7 @@
         실습은 nano 스펙(512 MB RAM, 0.25 vCPUs)으로 진행
 
 ```bash
-aws lightsail create-container-service \ 
+aws lightsail create-container-service \
 --service-name todo-service --power nano --scale 1
 ```
 

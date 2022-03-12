@@ -6,7 +6,6 @@
 
 ## 사전 준비 사항
 
-
 ### AWS CLI 설정
 
 AWS CLI 설치: [관련 링크](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
@@ -306,7 +305,7 @@ cloud-flask-svc   LoadBalancer   10.100.211.215   acd2f9103b9564eb3ada544282a1de
 ```
 
 해당 LB endpoint로 접근 하여 확인 동작 확인
-ex) http://acd2f9103b9564eb3ada544282a1dee3-566651492.ap-northeast-2.elb.amazonaws.com/user
+![task-web](assets/task-web.png)
 
 ## Clean Up
 실습 완료 후 비용 절약을 위해 실습한 EKS 리소스를 정리
