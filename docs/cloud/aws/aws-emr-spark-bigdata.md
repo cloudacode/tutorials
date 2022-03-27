@@ -6,15 +6,15 @@
 
 **Time to Complete: 0.5 hours**
 
+## Architecture
+![Architecture](assets/emr-spark-zepplin.png)
+
 <div>
 <a id="channel-add-button" target="_blank" href="http://pf.kakao.com/_nxoaTs">
   <img src="../../../assets/channel_add_small.png" alt="kakao channel add button"/>
 </a>
 <a class="github-button" href="https://github.com/cloudacode/tutorials" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star cloudacode/tutorials on GitHub">Star</a>
 </div>
-
-## Architecture
-![Architecture](assets/emr-spark-zepplin.png)
 
 ## Objective
 - 빅데이터 분석 시스템의 기본적인 구조와 활용 가능 범위를 파악한다.
