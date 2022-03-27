@@ -21,7 +21,7 @@
 - 빅데이터 파이프라인(생성, 수집/저장, 분석/가공, 공유/전달)에서 AWS의 활용 요소를 파악한다.
 - Zepplin을 통해 Spark 분석엔진을 손쉽게 관리하고 효과적으로 결과를 표현하는 방안을 파악한다.
 
-## Concept
+## Concepts
 - EMR: 방대한 양의 데이터를 처리 및 분석을 위한 빅데이터 클러스터 플랫폼 이며 Apache Hadoop, Apache Spark을 지원 [What is Amazon EMR?](https://docs.aws.amazon.com/ko_kr/emr/latest/ManagementGuide/emr-what-is-emr.html)
 - Spark: Apache Spark는 빅 데이터 워크로드에 주로 사용되는 오픈 소스 분산 처리 시스템. 빠른 성능을 위해 인 메모리 캐싱과 최적화된 실행을 사용하며, 일반 배치 처리, 스트리밍 분석, 기계 학습, 그래프 데이터베이스 및 임시 쿼리를 지원 
 - Zepplin: 커멘드라인 형태의 Spark 데이터 분석을 Web적으로 표현하는 어플리케이션
@@ -82,10 +82,15 @@
 
 ## 3. 데이터 분석
 
-샘플 데이터: 미국 교통 정보 데이터([항공]((https://catalog.data.gov/dataset/airline-on-time-performance-and-causes-of-flight-delays-on-time-data))) 약 80GB
+샘플 데이터: 미국 교통 정보 데이터([항공](https://catalog.data.gov/dataset/airline-on-time-performance-and-causes-of-flight-delays-on-time-data)) 약 80GB
 ![create-zepplin-note](assets/create-zepplin-note.png)
 
 ### 비행정보 데이터 적재 및 카운트 수행
+
+[Scala](https://spark.apache.org/docs/latest/quick-start.html)를 활용하여 쿼리를 작성
+
+!!!INFO
+        위 미국 교통 정보 cvs 데이터를 본인의 S3 bucket에 직접 올려서 Spark에 import도 가능 하지만 실습에서는 사전에 [Parquet](https://parquet.apache.org/) 포멧으로 압축되어 올라온 파일을 활용
 
 ```sql
 val parquetFile = sqlContext.read.parquet("s3://us-east-1.elasticmapreduce.samples/flightdata/input/")
@@ -134,7 +139,7 @@ DESC LIMIT 10
 
 ![spark-query-total-delays](assets/spark-query-total-delays.png)
 
-### 분석쿼리 - 가장 출항을 많이 한 노선
+### Scala 분석쿼리 - 가장 출항을 많이 한 노선
 
 ```sql
 %sql
