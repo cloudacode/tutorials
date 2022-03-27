@@ -44,7 +44,7 @@
 
 - Cluster Name: 사용할 클러스터 이름
 - Software Configuration : 데이터분석 엔진을 선택, 실습에서는 `Spark`
-- Hardware Configuration : 데이터분석 엔진 Worker 노드의 사이즈 결정, 비용 절감을 위해 auto-termination 활성화
+- Hardware Configuration : 데이터분석 엔진 Worker 노드의 사이즈 결정, 비용 절감을 위해 auto-termination 활성화 (idle after 1 hr -> 변경: `30mins`)
 - Security and Access: EMR 서버에 접속이 필요하지 않으면 key pair에 대해서 Proceed without an EC2 key pair 선택, SSH 접속을 원할 경우 본인의 EC2 key pair 지정
 
 ### EMR Cluster의 원격 접근을 위해 Security Group 설정
@@ -76,7 +76,7 @@
 포트는 Master public DNS 엔드포인트에 8890 포트로 접속
 ![access-emr-zepplin-console](assets/access-emr-zepplin-console.png)
 
-## 3. 데이터 분석 진행
+## 3. 데이터 분석
 
 샘플 데이터: 미국 교통 정보 데이터([항공]((https://catalog.data.gov/dataset/airline-on-time-performance-and-causes-of-flight-delays-on-time-data))) 약 80GB
 ![create-zepplin-note](assets/create-zepplin-note.png)
