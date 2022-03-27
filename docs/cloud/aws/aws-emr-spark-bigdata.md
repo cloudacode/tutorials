@@ -35,7 +35,7 @@
 [EMR 스펙 페이지](https://aws.amazon.com/emr/pricing/?nc=sn&loc=4)
 
 !!! Info
-        실습은 r3.xlarge 스펙(30.5 GiB RAM, 4 vCPUs) **3대**로 진행
+        실습은 r3.xlarge 스펙(30.5 GiB RAM, 4 vCPUs)의 온디맨드 인스턴스 **3대**로 진행, $0.399/hr x 3
 
 
 [EMR 콘솔](https://ap-northeast-2.console.aws.amazon.com/elasticmapreduce/home?region=ap-northeast-2#) 접근 후 다음과 같이 클러스터 생성
@@ -44,8 +44,12 @@
 
 - Cluster Name: 사용할 클러스터 이름
 - Software Configuration : 데이터분석 엔진을 선택, 실습에서는 `Spark`
-- Hardware Configuration : 데이터분석 엔진 Worker 노드의 사이즈 결정, 비용 절감을 위해 auto-termination 활성화 (idle after 1 hr -> 변경: `30mins`)
+- Hardware Configuration : 데이터분석 엔진 Worker 노드의 사이즈 결정, 비용 절감을 위해 auto-termination 활성화 (idle after 1 hr -> 변경: `30mins`) 
 - Security and Access: EMR 서버에 접속이 필요하지 않으면 key pair에 대해서 Proceed without an EC2 key pair 선택, SSH 접속을 원할 경우 본인의 EC2 key pair 지정
+
+실습에서는 `on-demand`로 진행 하지만 만약 EMR 노드들을 spot instance로 비용을 최적화 진행을 하는 경우 콘솔 위에 Advanced 옵션에서 선택 가능
+
+![emr-spot-instances](assets/emr-spot-instances.png)
 
 ### EMR Cluster의 원격 접근을 위해 Security Group 설정
 
