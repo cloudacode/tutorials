@@ -2,6 +2,9 @@
 site_name: CLOUDACODE - get started with step-by-step tutorials
 site_url: https://cloudacode.com/tutorials/
 site_author: KC Chang
+site_description: >-
+  Introduces the process of building various applications in the cloud environment 
+  and improving development procedures with DevOps culture.
 
 # Repository
 repo_name: cloudacode/tutorials
@@ -31,6 +34,7 @@ theme:
 markdown_extensions:
   - admonition
   - pymdownx.highlight
+  - meta
 
 # Page tree
 nav:
