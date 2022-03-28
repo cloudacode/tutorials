@@ -20,7 +20,7 @@ extra:
 # Configuration
 theme:
   name: material
-  custom_dir: overrides
+  # custom_dir: overrides
   palette:
     - scheme: default
       toggle:
