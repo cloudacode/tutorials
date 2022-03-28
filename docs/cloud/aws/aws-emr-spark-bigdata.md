@@ -1,3 +1,9 @@
+---
+title: Amazon EMR, Apache Spark, Zepplin으로 빅데이터 분석
+description: Amazon EMR, Spark, Zepplin을 통해 1억개가 넘는 비행 노선 정보를 가지고 가장 많이 출항 하고 도착하는 도시와 비행정보 그리고 지연된 이력 등을 시각적으로 표현하는 시스템을 구성 하여 원하는 결과를 도출 하여 본다
+image: https://raw.githubusercontent.com/cloudacode/tutorials/main/docs/cloud/aws/assets/emr-spark-zepplin.png
+---
+
 # Analysis BigData through Amazon EMR, Apache Spark, Zepplin
 
 **Amazon EMR, Apache Spark, Zepplin으로 빅데이터 분석 하기**
