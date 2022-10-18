@@ -60,6 +60,7 @@ phases:
 
 https://ap-northeast-2.console.aws.amazon.com/codesuite/codebuild/projects
 
+0. Enable build badge 활성화
 1. 소스: Github, 내 GitHub 계정의 리포지토리
    - GitHub Personal access token 생성 필요: [참고](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token)
    - 권한은 repo, admin:repo_hook [참고](https://docs.aws.amazon.com/codebuild/latest/userguide/access-tokens.html#access-tokens-github)
