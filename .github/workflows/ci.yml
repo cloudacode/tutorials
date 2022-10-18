@@ -5,19 +5,12 @@ on:
       - master
       - main
 jobs:
-  build:
-    name: Deploy mkdocs
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
         with:
-          # Fix git-revision-date-localized-plugin shallow git fetch depth
-          # setting wrong Git revision dates when running in Github Actions.
-          fetch-depth: 0
-
-      - name: Deploy docs
-        uses: mhausenblas/mkdocs-deploy-gh-pages@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CONFIG_FILE: mkdocs.yml
+          python-version: 3.x
+      - run: pip install mkdocs-material 
+      - run: mkdocs gh-deploy --force
