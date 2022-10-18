@@ -51,7 +51,7 @@ phases:
       - docker push $IMAGE_REPO_NAME:$TAG
 ```
 
-만약 TAG 버전을 unique한 commit hash로 저장 하고 싶다면 
+만약 TAG 버전을 unique한 commit hash로 저장 하고 싶다면
 ```yaml
       - TAG="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
 ```
@@ -67,28 +67,28 @@ https://ap-northeast-2.console.aws.amazon.com/codesuite/codebuild/projects
 3. 이벤트 유형: `PULL_REQUEST_CREATED`, `PULL_REQUEST_UPDATED`, `PULL_REQUEST_REOPENED`
    - 특정 Branch 이름이나 Tag로 이벤트를 감지 하고 싶다면 `Start a build under these condition`에 필터 추가 [참고 문서](https://docs.aws.amazon.com/codebuild/latest/userguide/github-webhook.html)
    e.g., feature/ 브랜치 이벤트만 `HEAD_REF: ^refs/heads/feature/*`
-4. 환경: 관리형 이미지, Ubuntu, Standard, aws/codebuild/standard:5.0, 권한 승격 활성화 (Enable this flag if you want to build Docker images or want your builds to get elevated privileges)
+4. 환경: 관리형 이미지, Amazon Linux 2, Standard, aws/codebuild/amazonlinux2-x86_64-standard:4.0, 권한 승격 활성화 (Enable this flag if you want to build Docker images or want your builds to get elevated privileges)
 5. 서비스 역할: 새 서비스 역할 (Name: default e.g., codebuild-*[project_name]*-service-role)
-   
+
 !!! Note
       CodeBuild 프로젝트 생성 후 IAM에서 추후 업데이트 필요
 
 6. Additional configuration 에 환경 변수 설정:
-   
+
    - TAG_VERSION(*일반 텍스트*): `latest` , 위에서 TAG_VERSION을 commit hash로 받는 설정을 하였을 경우는 설정 필요 없음
    - IMAGE_REPO_NAME(*일반 텍스트*): `[Docker Repo Name]` e.g., cloudacode/devops-flask
    - DOCKERHUB_USER(*Secrets Manager*): `dockerhub:username`
    - DOCKERHUB_PW(*Secrets Manager*): `dockerhub:password`
-   
+
 !!! Note
-      username, password 보안을 위해 Secrets Manager를 활용하여 암호 관리 필요. [참고](https://aws.amazon.com/premiumsupport/knowledge-center/codebuild-docker-pull-image-error/?nc1=h_ls#Store_your_DockerHub_credentials_with_AWS_Secrets_Manager) 
+      username, password 보안을 위해 Secrets Manager를 활용하여 암호 관리 필요. [참고](https://aws.amazon.com/premiumsupport/knowledge-center/codebuild-docker-pull-image-error/?nc1=h_ls#Store_your_DockerHub_credentials_with_AWS_Secrets_Manager)
 
 7. BuildSpec: default(빈칸) 혹은 `buildspec.yml` 입력
    - 상위 디렉토리에 buildspec.yml이라는 파일로 이름을 정했으므로 별도의 입력값 필요 없음
 8. Artifact: 없음
 9. CloudWatch: Default(CloudWatch 로그 선택)
 
-## 2. Configure Secrets Manager 
+## 2. Configure Secrets Manager
 Go to [SecretsManager](https://ap-northeast-2.console.aws.amazon.com/secretsmanager/home) console
 
 [DockerHub 자격 증명저장](https://aws.amazon.com/premiumsupport/knowledge-center/codebuild-docker-pull-image-error/?nc1=h_ls#Store_your_DockerHub_credentials_with_AWS_Secrets_Manager)
@@ -100,7 +100,7 @@ Store a new secret
 
 ## 3. Configure IAM policy
 
-SecretManager에서 정의한 dockerhub secret도 읽는 권한을 부여 하기 위해 
+SecretManager에서 정의한 dockerhub secret도 읽는 권한을 부여 하기 위해
 `CodeBuildSecretsManagerPolicy-[codebuild project name]-ap-northeast-2`의 Resource에 secretsmanager dockerhub ARN 추가 필요
 
 ### Confirm the dockerhub secrets ARN
@@ -122,9 +122,9 @@ Search `CodeBuildSecretsManagerPolicy-[codebuild project name]-ap-northeast-2` a
 수동으로 수행 및 콘솔에서 확인
 Go to [codebuild projects](https://ap-northeast-2.console.aws.amazon.com/codesuite/codebuild/projects)
 
-### DockerHub image 
+### DockerHub image
 
-이미지가 정상적으로 업로드 되었는지 확인 
+이미지가 정상적으로 업로드 되었는지 확인
 https://hub.docker.com
 
 ### Pull Request 테스트
@@ -133,7 +133,7 @@ https://hub.docker.com
 ![PR](./assets/build_process_by_github_webhook.png)
 CI 도구가 변경 사항을 인지하여 자동으로 수행 되는지 확인
 
-🎉 Congratulations, you have completed Publishing Docker images - AWS CodeBuild tutorial 
+🎉 Congratulations, you have completed Publishing Docker images - AWS CodeBuild tutorial
 
 이 글이 유용하였다면 ⭐ Star를, 💬 1:1 질문이나 기술 관련 문의가 필요하신 분들은 클라우드어코드 카카오톡 채널 추가 부탁드립니다.🤗
 
