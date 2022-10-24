@@ -3,7 +3,7 @@ site_name: CLOUDACODE
 site_url: https://cloudacode.com/tutorials/
 site_author: KC Chang
 site_description: >-
-  Introduces the process of building various applications in the cloud environment 
+  Introduces the process of building various applications in the cloud environment
   and improving development procedures with DevOps culture.
 
 # Repository
@@ -43,6 +43,7 @@ nav:
     - Cloud:
       - AWS:
         - cloud/aws/ec2-setup.md
+        - cloud/aws/aws-autoscaling-group.md
         - cloud/aws/apache-tomcat-redis.md
         - cloud/aws/cloud9-python-docker.md
         - cloud/aws/aws-lightsail-container.md
@@ -64,7 +65,7 @@ nav:
         - devops/cicd/aws-codepipeline-delivery-eb.md
   #   - DevOps(Terraform):
   #   - Kubernetes:
-  #   - Monitoring: 
+  #   - Monitoring:
   #   - CNCF:
   #   - ETC:
   - Blog ⧉: https://medium.com/@cloudacode
