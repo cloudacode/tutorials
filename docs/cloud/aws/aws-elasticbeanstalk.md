@@ -78,10 +78,6 @@ $ eb create flask-todo-demo -r ap-northeast-2 --vpc.id <vpc-id> \
 $ mkdir -p .ebextensions
 $ cat <<'EOF' > .ebextensions/options.config
 option_settings:
-  - option_name: DB_USER
-    value: ebroot
-  - option_name: DB_PASSWORD
-    value: ebsecret
   - option_name: DB_HOST
     value: eb-rds
   - option_name: DB_NAME
