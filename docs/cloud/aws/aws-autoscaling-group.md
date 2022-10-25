@@ -4,6 +4,8 @@
 
 이번 실습은 Amazon EC2 Auto Scaling을 통해 리소스 사용량에 맞게 자동 확장 축소를 해보는 실습입니다. AWS에서 가장 기본이 되는 EC2를 탄력적으로 운영하는 방법과 Auto Scaling 설정 구성을 이해할 수 있습니다.
 
+![asg-tutorial-architecture-diagram](./assets/asg-tutorial-architecture-diagram.png)
+
 **Time to Complete: 0.5 hours**
 
 <div>
