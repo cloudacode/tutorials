@@ -44,6 +44,7 @@ nav:
       - AWS:
         - cloud/aws/ec2-setup.md
         - cloud/aws/aws-autoscaling-group.md
+        - cloud/aws/aws-elasticbeanstalk.md
         - cloud/aws/apache-tomcat-redis.md
         - cloud/aws/cloud9-python-docker.md
         - cloud/aws/aws-lightsail-container.md
