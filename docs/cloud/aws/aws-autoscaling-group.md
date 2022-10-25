@@ -23,7 +23,10 @@
 
 ### Launch Template 설정
 
-[Launch Template 생성 페이지](https://ap-northeast-2.console.aws.amazon.com/ec2/home?region=ap-northeast-2#LaunchTemplates:)
+[Launch Template 생성 페이지](https://ap-northeast-2.console.aws.amazon.com/ec2/home?region=ap-northeast-2#LaunchTemplates:) 혹은
+
+[AutoScalingGroup 생성 페이지](https://ap-northeast-2.console.aws.amazon.com/ec2/home?region=ap-northeast-2#CreateAutoScalingGroup:)에서 launch template 생성
+![asg-launch-template](./assets/asg-launch-template.png)
 
 - 시작 템플릿의 이름을 입력하고 초기 버전에 대한 설명을 추가
 - Autoscaling에서 활용할 Template이므로 Auto Scaling guidance 활성화
