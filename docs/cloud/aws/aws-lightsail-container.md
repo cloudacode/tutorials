@@ -41,11 +41,15 @@ aws lightsail create-container-service \
 [Lightsail AWS 콘솔](https://lightsail.aws.amazon.com/ls/webapp/home/containers) 에서 확인 가능
 ![lightsail-container-service](assets/lightsail-container-service.png)
 
-### Container 이미지 업로드 
+### Continaer 이미지 다운
 
-`cloudacode/freecodetodo:latest`를 로컬에 Pull된 본인의 이미지 이름으로 변경
+```bash
+docker pull cloudacode/freecodetodo:latest
+```
 
 참고: `cloudacode/freecodetodo` [소스 코드](https://github.com/cloudacode/FlaskIntroduction)
+
+### Container 이미지 업로드
 
 ```bash
 aws lightsail push-container-image --service-name todo-service \
@@ -53,13 +57,13 @@ aws lightsail push-container-image --service-name todo-service \
 ```
 
 !!! Warning
-        output 결과로 나오는 ":devops-flask-service.flask-container.[숫자]"가 배포시 사용할 컨테이너 이미지의 정보이므로 결과 값을 저장 
+        output 결과로 나오는 ":devops-flask-service.flask-container.[숫자]"가 배포시 사용할 컨테이너 이미지의 정보이므로 결과 값을 저장
 
 ## 2. Deploy the container
 
 ### 컨테이너 메타데이터 파일 생성
 
-containers.json 
+containers.json
 ```json
 {
     "<container-image-name>": {
@@ -104,8 +108,8 @@ public-endpoint.json
 }
 ```
 
-!!! Note 
-        본인의 서비스의 포트에 맞게 변경 필요 
+!!! Note
+        본인의 서비스의 포트에 맞게 변경 필요
 
 
 ### 서비스 배포 수행
