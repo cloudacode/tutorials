@@ -35,7 +35,7 @@
 
 ```bash
 aws lightsail create-container-service \
---service-name todo-service --power nano --scale 1
+--service-name <YOUR_SERVICE_NAME> --power nano --scale 1
 ```
 
 [Lightsail AWS 콘솔](https://lightsail.aws.amazon.com/ls/webapp/home/containers) 에서 확인 가능
@@ -52,7 +52,7 @@ docker pull cloudacode/freecodetodo:latest
 ### Container 이미지 업로드
 
 ```bash
-aws lightsail push-container-image --service-name todo-service \
+aws lightsail push-container-image --service-name <YOUR_SERVICE_NAME> \
  --label flask-container --image cloudacode/freecodetodo:latest
 ```
 
