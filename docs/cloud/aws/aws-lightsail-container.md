@@ -115,7 +115,7 @@ public-endpoint.json
 ### 서비스 배포 수행
 
 ```bash
-aws lightsail create-container-service-deployment --service-name todo-service \
+aws lightsail create-container-service-deployment --service-name <YOUR_SERVICE_NAME> \
 --containers file://containers.json --public-endpoint file://public-endpoint.json
 ```
 
@@ -124,7 +124,7 @@ aws lightsail create-container-service-deployment --service-name todo-service \
 [Lightsail 콘솔](https://lightsail.aws.amazon.com/ls/webapp/home/containers) 혹은 aws lightsail cli로 확인
 
 ```bash
-aws lightsail get-container-services --service-name todo-service
+aws lightsail get-container-services --service-name <YOUR_SERVICE_NAME>
 ```
 을 수행하여 `STATE`가 `RUNNING` 으로 상태가 변경 되었으면 `URL`로 서비스 접속
 
