@@ -1,8 +1,8 @@
 # A Simple REST Flask APP with MariaDB Container
 
-In this tutorial, you will learn how to build a Flask web application and implement the app with database(MariaDB). using postman to test basic REST APIs(HTTP methods: GET, POST, DELETE). 
+In this tutorial, you will learn how to build a Flask web application and implement the app with database(MariaDB). using postman to test basic REST APIs(HTTP methods: GET, POST, DELETE).
 
-Flask로 Web App을 개발을 하고 데이터베이스와 연동을 하는 방법을 알아본다. CURL을 사용 하여 기본적인 REST API(HTTP methods: GET, POST, DELETE)를 테스트 해본다.  
+Flask로 Web App을 개발을 하고 데이터베이스와 연동을 하는 방법을 알아본다. CURL을 사용 하여 기본적인 REST API(HTTP methods: GET, POST, DELETE)를 테스트 해본다.
 
 **Time to Complete: 1-2 hours**
 
@@ -10,8 +10,8 @@ Flask로 Web App을 개발을 하고 데이터베이스와 연동을 하는 방�
 
 - Download stable [POSTMAN](https://www.postman.com/downloads/)
 - Python 3.x
-- Python Library [requirement.txt](https://github.com/cloudacode/coolstuff/blob/main/simple-flask-app/requirements.txt)
-  
+- Python Library [requirement.txt](https://github.com/cloudacode/coolstuff/blob/main/flask-example/simple-flask-app/requirements.txt)
+
         flask
         pymysql
         flask_table
@@ -35,7 +35,7 @@ docker network create test-net
 ### Start predefined mariadb container
 
 ```bash
-docker run -p 3306:3306 --name my-mariadb --net test-net -d cloudacode/mariadb:v1.1.0
+docker run -p 3306:3306 --name my-mariadb --net test-net -d cloudacode/simple-mariadb:latest
 ```
 
 dockerfile of the cloudacode/mariadb: [simple-mariadb-container](https://github.com/cloudacode/coolstuff/tree/main/simple-mariadb-container)
@@ -49,7 +49,7 @@ dockerfile of the cloudacode/mariadb: [simple-mariadb-container](https://github.
 
 ```bash
 docker run -p 3306:3306 --name my-mariadb --net test-net -e MYSQL_ROOT_PASSWORD=mysecret -e MYSQL_DATABASE=cloud_user -d mariadb:latest
-``` 
+```
 
 !!! Note
     mariadb official repo: https://hub.docker.com/_/mariadb
@@ -73,12 +73,12 @@ mysql -uroot -pmysecret
 MariaDB [(none)]> use cloud_user;
 Database changed
 MariaDB [cloud_user]>
-MariaDB [cloud_user]> CREATE TABLE IF NOT EXISTS `cloud_user` (  
-    `user_id` bigint NOT NULL AUTO_INCREMENT,   
-    `user_name` varchar(45) DEFAULT NULL,   
-    `user_email` varchar(45) DEFAULT NULL,   
-    `user_bio` varchar(255) DEFAULT NULL,   
-    PRIMARY KEY (`user_id`) 
+MariaDB [cloud_user]> CREATE TABLE IF NOT EXISTS `cloud_user` (
+    `user_id` bigint NOT NULL AUTO_INCREMENT,
+    `user_name` varchar(45) DEFAULT NULL,
+    `user_email` varchar(45) DEFAULT NULL,
+    `user_bio` varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`user_id`)
     ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ;
 
 Query OK, 0 rows affected, 1 warning (0.001 sec)
@@ -87,8 +87,8 @@ MariaDB [cloud_user]> select * from cloud_user;
 Empty set (0.001 sec)
 
 MariaDB [cloud_user]> INSERT INTO `cloud_user` (
-    `user_id`,`user_name`,`user_email`, `user_bio`) 
-    values  
+    `user_id`,`user_name`,`user_email`, `user_bio`)
+    values
     (1,'kc chang','cloudacode@gmail.com', 'mento');
 
 Query OK, 1 row affected (0.001 sec)
@@ -112,8 +112,8 @@ source code: https://github.com/cloudacode/coolstuff.git
 
 ```bash
 git clone https://github.com/cloudacode/coolstuff.git
-cd simple-flask-app
-docker built -t cloudacode/cloudflask:v1.0.0 .
+cd flask-example/simple-flask-app
+docker build -t cloudacode/simple-flask-app:latest .
 ```
 
 !!! Note
@@ -123,7 +123,7 @@ docker built -t cloudacode/cloudflask:v1.0.0 .
 
 run the flask app on your localhost or dev machine
 ```bash
-docker run -p 5000:5000 --net test-net --env-file ./env.list cloudacode/cloudflask:v1.1.0
+docker run -p 8888:5000 --net test-net --env-file ./env.list cloudacode/simple-flask-app:latest
 ```
 
 !!! Note
@@ -133,7 +133,7 @@ docker run -p 5000:5000 --net test-net --env-file ./env.list cloudacode/cloudfla
 
 get date from the server. you can also use the web browser to get the date
 ```bash
-curl localhost:5000/user
+curl localhost:8888/user
 ```
 
 review the output. here is the expected output message
@@ -152,14 +152,43 @@ post Json data to the server
 ```bash
 curl --header "Content-Type: application/json" \
 --request POST \
---data '{"bio": "test user", "email": "cloudacode@gmail.com", "name": "test1"}' \
-http://localhost:5000/add
+--data '{"bio": "test user", "email": "test1@cloudacode.com", "name": "test1"}' \
+http://localhost:8888/add
 ```
 
 get the user list again from the server
 ```bash
-curl localhost:5000/user
+curl localhost:8888/user
 ```
 
+## 6. Docker Compose
 
-🎉 Congratulations, you have completed Flask, MariaDB integration tutorial 
+Install Docker Compose: [link](https://docs.docker.com/compose/install/)
+
+```yaml
+version: "2"
+services:
+  simple-mariadb:
+    image: cloudacode/simple-mariadb:latest
+    ports:
+      - "3306:3306"
+  simple-flask-app:
+    links:
+      - simple-mariadb
+    image: cloudacode/simple-flask-app:latest
+    ports:
+      - "8888:5000"
+    environment:
+      - DB_USER=root
+      - DB_PASSWORD=mysecret
+      - DB_NAME=cloud_user
+      - DB_HOST=simple-mariadb
+```
+docker-compose.yaml
+
+Run docker compose to up all containers
+```
+docker-compose up -d
+```
+
+🎉 Congratulations, you have completed Flask, MariaDB integration tutorial
