@@ -48,7 +48,9 @@ dockerfile of the cloudacode/mariadb: [simple-mariadb-container](https://github.
 #### Deploy new MariaDB container
 
 ```bash
-docker run -p 3306:3306 --name my-mariadb --net test-net -e MYSQL_ROOT_PASSWORD=mysecret -e MYSQL_DATABASE=cloud_user -d mariadb:latest
+docker run -p 3306:3306 --name my-mariadb --net test-net \
+ -e MYSQL_ROOT_PASSWORD=mysecret -e MYSQL_DATABASE=cloud_user \
+ -d mariadb:latest
 ```
 
 !!! Note
@@ -108,7 +110,7 @@ MariaDB [cloud_user]> select * from cloud_user;
 
 to run the flask app in your local environment, you should build the flask app first.
 
-source code: https://github.com/cloudacode/coolstuff.git
+source code: [cloudacode/coolstuff.git](https://github.com/cloudacode/coolstuff)
 
 ```bash
 git clone https://github.com/cloudacode/coolstuff.git
@@ -121,9 +123,17 @@ docker build -t cloudacode/simple-flask-app:latest .
 
 ## 4. Run the Flask app
 
-run the flask app on your localhost or dev machine
+Run the flask app on your localhost or dev machine
+
 ```bash
-docker run -p 8888:5000 --net test-net --env-file ./env.list cloudacode/simple-flask-app:latest
+docker run -p 8888:5000 --net test-net \
+ -e DB_USER=root -e DB_PASSWORD=mysecret -e DB_NAME=cloud_user -e DB_HOST=simple-mariadb \
+ cloudacode/simple-flask-app:latest
+```
+OR
+```bash
+docker run -p 8888:5000 --net test-net \
+ --env-file ./env.list cloudacode/simple-flask-app:latest
 ```
 
 !!! Note
