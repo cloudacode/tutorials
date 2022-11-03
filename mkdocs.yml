@@ -48,6 +48,7 @@ nav:
         - cloud/aws/apache-tomcat-redis.md
         - cloud/aws/cloud9-python-docker.md
         - cloud/aws/aws-lightsail-container.md
+        - cloud/aws/aws-ecs-container.md
         - cloud/aws/amazon-eks-setup.md
         - cloud/aws/aws-emr-spark-bigdata.md
       - GCP:
