@@ -41,6 +41,7 @@ ECS Dashboard 에서 [Task Definitions](https://ap-northeast-2.console.aws.amazo
 
 - Container Name: 컨테이너 이름
 - Image: 컨테이너 이미지 URL
+  예) cloudacode/freecodetodo:latest
 - Port Mappings: 외부로 노출할 컨테이너 포트
 
 ![ecs-fargate-td-container](./assets/ecs-fargate-td-container.png)
