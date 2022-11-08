@@ -26,7 +26,7 @@ CI/CD Pipeline 도구를 통해 소스 관리, 도커 빌드 자동화, 서비�
 
 [Setup ECS](../../cloud/aws/aws-ecs-container.md)
 
-## 2. Update the Buildspec file for EB
+## 2. Update the Buildspec file for ECS
 
 CodePipline의 명세서 buildspec.yml 을 작성
 
