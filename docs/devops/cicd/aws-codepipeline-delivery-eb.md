@@ -1,4 +1,4 @@
-# Continuous delivery - AWS CodePipeline
+# Continuous delivery - AWS CodePipeline - ElasticBeanstalk
 
 **개발 빌드 및 배포 환경 자동화 실습**
 
@@ -45,7 +45,7 @@ CodePipline의 명세서 buildspec.yml 을 작성
       - printf '{"AWSEBDockerrunVersion":"1","Image":{"Name":"%s"},"Ports":[{"ContainerPort":"5000"}]}' $IMAGE_REPO_NAME:$TAG > Dockerrun.aws.json
 artifacts:
     files: Dockerrun.aws.json
-``` 
+```
 
 예시)
 ```bash
@@ -87,7 +87,7 @@ artifacts:
 2. Service Role: New Service Role
 3. Role Name: `AWSCodePipelineServiceRole-ap-northeast-2-[Pipeline Name]`
    - AWS CodePipeline이 이 새 파이프라인에 사용할 서비스 역할을 생성하도록 허용 활성화
-  
+
 ### Step 2: Source Stage
 1. 소스: Github(Version 1), 내 GitHub 계정의 리포지토리
    - Github v2가 권고 사항이나 실습은 v1로 진행: [v2 변경시 참고](https://docs.aws.amazon.com/ko_kr/codepipeline/latest/userguide/update-github-action-connections.html)
@@ -105,7 +105,7 @@ artifacts:
 
 ## 4. Verify CodePipeline
 
-### 테스트 Pull Request/Merge 
+### 테스트 Pull Request/Merge
 
 별도의 Branch를 만들어 flask-app의 코드 변경(예, style.css 배경 변경) 후 main branch로 PR 수행.
 
@@ -113,7 +113,7 @@ https://ap-northeast-2.console.aws.amazon.com/codesuite/codepipeline/pipelines
 
 Pipeline 도구가 변경 사항을 인지하여 자동으로 빌드/배포가 수행 되는지 확인
 
-### ElasticBeanstalk 환경 URL 확인 
+### ElasticBeanstalk 환경 URL 확인
 
 EB의 애플리케이션 [환경 URL](#create-applicationcreate-a-web-app) 확인 후 정상적으로 웹페이지에 변경이 일어났는지 확인
 
