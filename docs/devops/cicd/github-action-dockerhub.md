@@ -40,28 +40,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v2
-      
+        uses: actions/checkout@v3
+
       - name: Log in to Docker Hub
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      
+
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: cloudacode/cloudflask
-      
+          images: dockerhub-namespace/dockerhub-repository
+
       - name: Build and push Docker image
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
         with:
           context: .
+          file: ./Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-```  
+```
 
 Line 25 번째 줄에 본인의 `dockerhub-namespace/repo-name` 으로 변경후 code commit & main branch에 merge
 
@@ -72,9 +73,9 @@ Line 25 번째 줄에 본인의 `dockerhub-namespace/repo-name` 으로 변경후
 - Pull Request 진행 화면에서 Github Action이 동작 하는지 확인
 ![github-action-pr](assets/github-action-pr.png)
 
-## 4. Verify DockerHub image 
+## 4. Verify DockerHub image
 
-이미지가 정상적으로 본인 Repo에 업로드 되었는지 확인 
+이미지가 정상적으로 본인 Repo에 업로드 되었는지 확인
 https://hub.docker.com
 
 !!! Note
@@ -84,4 +85,4 @@ https://hub.docker.com
 - https://docs.github.com/en/actions/guides/publishing-docker-images
 
 
-🎉 Congratulations, you have completed Publishing Docker images - GitHub Action tutorial 
+🎉 Congratulations, you have completed Publishing Docker images - GitHub Action tutorial
