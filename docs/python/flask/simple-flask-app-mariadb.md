@@ -38,7 +38,7 @@ docker network create test-net
 docker run -p 3306:3306 --name my-mariadb --net test-net -d cloudacode/simple-mariadb:latest
 ```
 
-dockerfile of the cloudacode/mariadb: [simple-mariadb-container](https://github.com/cloudacode/coolstuff/tree/main/simple-mariadb-container)
+dockerfile of the cloudacode/mariadb: [simple-mariadb-container](https://github.com/cloudacode/coolstuff/tree/main/flask-example/simple-mariadb-app)
 
 !!! Note
     If you want to setup the database by yourself, please follow below guideline.
