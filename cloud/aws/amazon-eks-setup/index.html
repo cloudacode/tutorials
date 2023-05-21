@@ -1,0 +1,1470 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Introduces the process of building various applications in the cloud environment and improving development procedures with DevOps culture.">
+      
+      
+        <meta name="author" content="KC Chang">
+      
+      
+        <link rel="canonical" href="https://cloudacode.com/tutorials/cloud/aws/amazon-eks-setup/">
+      
+      
+        <link rel="prev" href="../aws-ecs-container/">
+      
+      
+        <link rel="next" href="../aws-emr-spark-bigdata/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.14">
+    
+    
+      
+        <title>Setup an Amazon EKS, Deploy web application - CLOUDACODE</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.85bb2934.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.a6bdf11c.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+
+  <script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-L86XX3YR79"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-L86XX3YR79",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-L86XX3YR79",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  
+  
+  
+  
+    
+  
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Setup an Amazon EKS, Deploy web application - CLOUDACODE" />
+  <meta property="og:description" content="Introduces the process of building various applications in the cloud environment and improving development procedures with DevOps culture." />
+  <meta property="og:url" content="https://cloudacode.com/tutorials/cloud/aws/amazon-eks-setup/" />
+  <meta property="og:image" content="https://raw.githubusercontent.com/cloudacode/tutorials/main/docs/assets/cloudacode-intro.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#setup-an-amazon-eks-deploy-web-application" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="CLOUDACODE" class="md-header__button md-logo" aria-label="CLOUDACODE" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CLOUDACODE
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Setup an Amazon EKS, Deploy web application
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+            
+              <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+              </label>
+            
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+            
+              <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+              </label>
+            
+          
+        </form>
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/cloudacode/tutorials" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    cloudacode/tutorials
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CLOUDACODE" class="md-nav__button md-logo" aria-label="CLOUDACODE" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    CLOUDACODE
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/cloudacode/tutorials" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    cloudacode/tutorials
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          Tutorial
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Tutorial
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+          Cloud
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Cloud
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_1" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_1_1" id="__nav_2_1_1_label" tabindex="0">
+          AWS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_1_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          AWS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ec2-setup/" class="md-nav__link">
+        Launch an EC2, Deploy Flask app
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aws-autoscaling-group/" class="md-nav__link">
+        Amazon EC2 Auto Scaling
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aws-elasticbeanstalk/" class="md-nav__link">
+        Deploy a Flask app on Amazon ElasticBeanstalk
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apache-tomcat-redis/" class="md-nav__link">
+        Build a 3tier Web App on AWS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cloud9-python-docker/" class="md-nav__link">
+        Develop Python and Docker on Cloud9
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aws-lightsail-container/" class="md-nav__link">
+        Deploy Container on AWS Lightsail
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aws-ecs-container/" class="md-nav__link">
+        Deploy Container on Elastic Container Service
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Setup an Amazon EKS, Deploy web application
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Setup an Amazon EKS, Deploy web application
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    사전 준비 사항
+  </a>
+  
+    <nav class="md-nav" aria-label="사전 준비 사항">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aws-cli" class="md-nav__link">
+    AWS CLI 설정
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    Architecture
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-eks" class="md-nav__link">
+    1. EKS 구성 하기
+  </a>
+  
+    <nav class="md-nav" aria-label="1. EKS 구성 하기">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#iam-user-for-eks" class="md-nav__link">
+    IAM user for EKS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-eksctl-and-kubectl" class="md-nav__link">
+    Install eksctl and kubectl
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deploy-eks-cluster" class="md-nav__link">
+    Deploy EKS Cluster
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#eks-cluster" class="md-nav__link">
+    EKS Cluster 접속 확인
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-application" class="md-nav__link">
+    2. Application 배포
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Application 배포">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#database" class="md-nav__link">
+    Database 배포
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flask-app" class="md-nav__link">
+    Flask APP 배포
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clean-up" class="md-nav__link">
+    Clean Up
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trobleshooting-eks" class="md-nav__link">
+    Trobleshooting - EKS
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aws-emr-spark-bigdata/" class="md-nav__link">
+        Amazon EMR, Apache Spark, Zepplin으로 빅데이터 분석
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_1_2" id="__nav_2_1_2_label" tabindex="0">
+          GCP
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          GCP
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../gcp/gcp-ce-setup/" class="md-nav__link">
+        Launch a GCE, Deploy Flask app
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_1_3" id="__nav_2_1_3_label" tabindex="0">
+          Openstack
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_3">
+          <span class="md-nav__icon md-icon"></span>
+          Openstack
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openstack/install-openstack/" class="md-nav__link">
+        Deploy openstack(devstack) on EC2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+          Python
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Python
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../python/flask/simple-flask-app-mariadb/" class="md-nav__link">
+        A Simple REST Flask APP with MariaDB Container
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+          Kubernetes
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes/minikube-todo-app/" class="md-nav__link">
+        Deploy Todo App locally via Minikube
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes/argocd-deployment/" class="md-nav__link">
+        Implement an ArgoCD, Deploy Monitoring Pipeline
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+          DevOps
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          DevOps
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_1" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_4_1" id="__nav_2_4_1_label" tabindex="0">
+          CICD
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_4_1">
+          <span class="md-nav__icon md-icon"></span>
+          CICD
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../devops/cicd/github-aws-codebuild-dockerhub/" class="md-nav__link">
+        Publishing Docker images - AWS CodeBuild
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../devops/cicd/github-action-dockerhub/" class="md-nav__link">
+        Publishing Docker images - GitHub Action
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../devops/cicd/aws-codepipeline-delivery-eb/" class="md-nav__link">
+        Continuous delivery - AWS CodePipeline - ElasticBeanstalk
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../devops/cicd/aws-codepipeline-delivery-ecs/" class="md-nav__link">
+        Continuous delivery - AWS CodePipeline - ECS
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://medium.com/@cloudacode" class="md-nav__link">
+        Blog ⧉
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://www.youtube.com/channel/UCw46J_QQ3-HrjPsSsuOSDdQ" class="md-nav__link">
+        Youtube ⧉
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    사전 준비 사항
+  </a>
+  
+    <nav class="md-nav" aria-label="사전 준비 사항">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aws-cli" class="md-nav__link">
+    AWS CLI 설정
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    Architecture
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-eks" class="md-nav__link">
+    1. EKS 구성 하기
+  </a>
+  
+    <nav class="md-nav" aria-label="1. EKS 구성 하기">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#iam-user-for-eks" class="md-nav__link">
+    IAM user for EKS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-eksctl-and-kubectl" class="md-nav__link">
+    Install eksctl and kubectl
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deploy-eks-cluster" class="md-nav__link">
+    Deploy EKS Cluster
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#eks-cluster" class="md-nav__link">
+    EKS Cluster 접속 확인
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-application" class="md-nav__link">
+    2. Application 배포
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Application 배포">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#database" class="md-nav__link">
+    Database 배포
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flask-app" class="md-nav__link">
+    Flask APP 배포
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clean-up" class="md-nav__link">
+    Clean Up
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trobleshooting-eks" class="md-nav__link">
+    Trobleshooting - EKS
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="setup-an-amazon-eks-deploy-web-application">Setup an Amazon EKS, Deploy web application</h1>
+<p><strong>EKS로 환경 구성 및 어플리케이션 배포 실습</strong></p>
+<p>이번 실습은 Amazon EKS로 대규모 컨테이너 운영 환경을 만들고 서비스(Container)를 배포 배포 해보는 실습 입니다. AWS에서 쿠버네틱스 서비스인 EKS에 대해 배워 보고 컨테이너 서비스 배포를 위한 기본 작업들을 이해 할 수 있습니다.</p>
+<h2 id="_1">사전 준비 사항</h2>
+<h3 id="aws-cli">AWS CLI 설정</h3>
+<p>AWS CLI 설치: <a href="https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html">관련 링크</a></p>
+<p>AWS CLI 초기 설정: <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html">관련 링크</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>원활한 실습을 위해 IAM User 권한에 <code>AdministratorAccess</code> policy 부여</p>
+</div>
+<h2 id="architecture">Architecture</h2>
+<p><img alt="Architecture" src="../assets/aws-eks-flask-db-app.png" /></p>
+<div>
+<a id="channel-add-button" target="_blank" href="http://pf.kakao.com/_nxoaTs">
+  <img src="../../../assets/channel_add_small.png" alt="kakao channel add button"/>
+</a>
+<a class="github-button" href="https://github.com/cloudacode/tutorials" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star cloudacode/tutorials on GitHub">Star</a>
+</div>
+
+<h2 id="1-eks">1. EKS 구성 하기</h2>
+<h3 id="iam-user-for-eks">IAM user for EKS</h3>
+<p>EKS는 Root User로 생성/접속하는 것을 보안상 권고하지 않으며 EKS을 관리하기 위한 권한(Kubernetes RBAC authorization)을 EKS를 생성한 IAM 엔터티(user 혹은 role)로 부터 할당을 시키기 때문에 IAM user 혹은 role를 사용중이지 않다면 필수로 IAM 엔터티를 생성하고 EKS 생성 역할을 부여 해야한다. </p>
+<p>https://docs.aws.amazon.com/eks/latest/userguide/create-cluster.html</p>
+<p>사용중인 IAM 엔터티(유저, Role)가 있다면 eksctl 권한이 있는지 검토. 원활한 실습을 위해 <strong>AdministratorAccess</strong> policy 부여</p>
+<p>Otherwise, create a IAM user with eksctl minimum policies.
+https://eksctl.io/usage/minimum-iam-policies/</p>
+<p>현재 세션의 IAM 엔터티 확인 방법</p>
+<pre><code class="language-bash">$ aws sts get-caller-identity
+</code></pre>
+<h3 id="install-eksctl-and-kubectl">Install eksctl and kubectl</h3>
+<p>EKS 생성을 위해 eksctl을 설치 하고 추후 kubernetes 관리를 위해 kubectl도 사전에 설치 필요: <a href="https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/install-kubectl.html">kubectl 설치(1.18)</a></p>
+<p><a href="https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/eksctl.html">eksctl 설치</a></p>
+<h3 id="deploy-eks-cluster">Deploy EKS Cluster</h3>
+<p>EKS 배포를 위한 구성 정보 파일 (eks-cluster-config.yml) 작성</p>
+<p>*실습 비용 절감을 위해 SPOT 인스턴스 사용</p>
+<pre><code class="language-yaml">---
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: cloud-eks-cluster
+  region: ap-northeast-2
+
+availabilityZones: [&quot;ap-northeast-2a&quot;, &quot;ap-northeast-2c&quot;]
+
+iam:
+  withOIDC: true
+
+managedNodeGroups:
+- name: cloud-eks-workers
+  desiredCapacity: 1
+  iam:
+    withAddonPolicies:
+      albIngress: true
+  instanceTypes: [&quot;c4.large&quot;,&quot;c5.large&quot;]
+  spot: true
+#  instanceType: t3.small
+#  ssh:
+#    publicKeyName: &quot;&lt;your key pair name&gt;&quot;
+#    https://ap-northeast-2.console.aws.amazon.com/ec2/v2/home?region=ap-northeast-2#KeyPairs:
+
+cloudWatch:
+    clusterLogging:
+        enableTypes: [&quot;audit&quot;, &quot;authenticator&quot;, &quot;controllerManager&quot;]
+</code></pre>
+<p>정의한 구성 정보 대로 cluster 생성</p>
+<pre><code>$ eksctl create cluster -f ./eks-cluster-config.yml
+</code></pre>
+<p>EKS Cluster 구성 완료 까지 약 15분 소요</p>
+<p>옵션)만약 CLI로 하고 싶다면 다음과 같이 수행</p>
+<pre><code>eksctl create cluster \
+--name cloud-eks-01 \
+--version 1.18 \
+--region ap-northeast-2 \
+--zones=ap-northeast-2a,ap-northeast-2c \
+--nodegroup-name cloud-eks-workers \
+--nodes 1 \
+--nodes-min 1 \
+--nodes-max 3 \
+--with-oidc \
+--managed \
+--alb-ingress-access \
+--spot \
+--instance-types=c4.large,c5.large
+</code></pre>
+<h3 id="eks-cluster">EKS Cluster 접속 확인</h3>
+<p>정상적인 output</p>
+<pre><code>[✔]  all EKS cluster resources for &quot;cloud-eks-01&quot; have been created
+[ℹ]  nodegroup &quot;cloud-eks-workers&quot; has 1 node(s)
+[ℹ]  node &quot;ip-192-168-27-236.ap-northeast-2.compute.internal&quot; is ready
+[ℹ]  waiting for at least 1 node(s) to become ready in &quot;cloud-eks-workers&quot;
+[ℹ]  nodegroup &quot;cloud-eks-workers&quot; has 1 node(s)
+[ℹ]  node &quot;ip-192-168-27-236.ap-northeast-2.compute.internal&quot; is ready
+[ℹ]  kubectl command should work with &quot;/Users/kcchang/.kube/config&quot;, try 'kubectl get nodes'
+[✔]  EKS cluster &quot;cloud-eks-01&quot; in &quot;ap-northeast-2&quot; region is ready
+</code></pre>
+<p>kubectl을 통해 추가된 node 확인</p>
+<pre><code>➜  ✗ kubectl get nodes
+NAME                                                STATUS   ROLES    AGE   VERSION
+ip-192-168-27-236.ap-northeast-2.compute.internal   Ready    &lt;none&gt;   19m   v1.18.9-eks-d1db3c
+</code></pre>
+<h2 id="2-application">2. Application 배포</h2>
+<h3 id="database">Database 배포</h3>
+<p><a href="https://github.com/cloudacode/coolstuff/tree/main/todo-flask-app">예제 todo 애플리케이션</a>에서 로컬 sqlight DB 대신에 외부 RDBMS(mariadb, mysql등) 리소스를 연동 한 경우에는 쿠버네티스 위에 DB app을 배포 해야하므로 관련해 Deployment manifast 파일 작성</p>
+<p>Deployment 파일 구성 하기 <a href="https://kubernetes.io/ko/docs/concepts/workloads/controllers/deployment/">kuberentes deployment</a></p>
+<p>mysql-deployment.yaml</p>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - image: cloudacode/mariadb-todo:v1.0.1
+        name: mysql
+        ports:
+        - containerPort: 3306
+          name: mysql
+</code></pre>
+<p>Deploy the contents of the deployment file:</p>
+<pre><code class="language-bash">kubectl apply -f mysql-deployment.yaml
+</code></pre>
+<p>Display information about the Deployment:</p>
+<pre><code class="language-bash">kubectl describe deployment mysql
+</code></pre>
+<p>정상적으로 mysql이 Deploy가 되었다면 flask app에서 mysql로 접속을 위해 service를 deployment에 매핑</p>
+<p>mysql-service.yaml</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: mysql
+  clusterIP: None
+</code></pre>
+<p>Deploy the contents of the service file:</p>
+<pre><code class="language-bash">kubectl apply -f mysql-service.yaml
+</code></pre>
+<p>배포가 정상적으로 완료가 되면 Pod 정보를 찾을수 있다</p>
+<pre><code class="language-bash">kubectl get pods -l app=mysql
+</code></pre>
+<p>Output</p>
+<pre><code class="language-bash">NAME                     READY   STATUS    RESTARTS   AGE
+mysql-6fd94cc949-d8lj7   1/1     Running   0          23s
+</code></pre>
+<h3 id="flask-app">Flask APP 배포</h3>
+<p>쿠버네티스에 Flask app을 배포하기 위해 Deployment manifast 파일 작성</p>
+<p>flask-deployment.yaml</p>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloud-flask
+  labels:
+    app: cloud-flask
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloud-flask
+  strategy:
+    rollingUpdate:
+      maxSurge: 20%
+      maxUnavailable: 20%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: cloud-flask
+    spec:
+      containers:
+      - image: cloudacode/python-todo:v1.1.0
+        imagePullPolicy: Always
+        name: cloud-flask
+        ports:
+        - containerPort: 5000
+          protocol: TCP
+        env:
+        - name: DB_USER
+          value: root
+        - name: DB_PASSWORD
+          value: mysecret
+        - name: DB_NAME
+          value: todo
+        - name: DB_HOST
+          value: mysql
+</code></pre>
+<p>Deploy the contents of the deployment file:</p>
+<pre><code class="language-bash">kubectl apply -f flask-deployment.yaml
+</code></pre>
+<p>Display information about the Deployment:</p>
+<pre><code class="language-bash">kubectl describe deployment cloud-flask
+</code></pre>
+<p>정상적으로 Flask app이 배포 되었다면 외부에서 flask app으로 접속을 위해 service를 deployment에 매핑</p>
+<p>flask-service.yaml</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Service
+metadata:
+  name: cloud-flask-svc
+spec:
+  selector:
+    app: cloud-flask
+  ports:
+   -  protocol: TCP
+      port: 80
+      targetPort: 5000
+  type: LoadBalancer
+</code></pre>
+<p>Deploy the contents of the service file:</p>
+<pre><code class="language-bash">kubectl apply -f flask-service.yaml
+</code></pre>
+<p>배포가 정상적으로 완료가 되면 Pod 정보를 찾을수 있다</p>
+<pre><code class="language-bash">kubectl get pods -l app=cloud-flask
+</code></pre>
+<p>flask app의 경우는 Service 타입을 LB로 외부 노출을 시켰으므로 다음과 같이 LB Endpoint를 확인 가능</p>
+<pre><code class="language-bash">kubectl get svc cloud-flask-svc
+</code></pre>
+<p>Output</p>
+<pre><code class="language-bash">NAME              TYPE           CLUSTER-IP       EXTERNAL-IP                                                                   PORT(S)        AGE
+cloud-flask-svc   LoadBalancer   10.100.211.215   acd2f9103b9564eb3ada544282a1dee3-566651492.ap-northeast-2.elb.amazonaws.com   80:31126/TCP   101s 
+</code></pre>
+<p>해당 LB endpoint로 접근 하여 확인 동작 확인
+<img alt="task-web" src="../assets/task-web.png" /></p>
+<h2 id="clean-up">Clean Up</h2>
+<p>실습 완료 후 비용 절약을 위해 실습한 EKS 리소스를 정리</p>
+<pre><code>eksctl delete cluster --region=ap-northeast-2 --name=&lt;your eks cluster name&gt;
+</code></pre>
+<h2 id="trobleshooting-eks">Trobleshooting - EKS</h2>
+<p>https://aws.amazon.com/premiumsupport/knowledge-center/amazon-eks-cluster-access/</p>
+<p>https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/troubleshooting.html#unauthorized</p>
+<p>이 글이 유용하였다면 ⭐ Star를, 💬 1:1 질문이나 기술 관련 문의가 필요하신 분들은 클라우드어코드 카카오톡 채널 추가 부탁드립니다.🤗</p>
+<div>
+<a id="channel-add-button" target="_blank" href="http://pf.kakao.com/_nxoaTs">
+  <img src="../../../assets/channel_add_small.png" alt="kakao channel add button"/>
+</a>
+<a class="github-button" href="https://github.com/cloudacode/tutorials" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star cloudacode/tutorials on GitHub">Star</a>
+</div>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.b4d07000.min.js"></script>
+      
+    
+  </body>
+</html>
